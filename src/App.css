@@ -49,7 +49,7 @@ header i {
   margin: 0 auto;
 }
 
-.add-item {
+.add-deck {
   border-radius: 2px;
   border-top: 3px solid #103d5d;
   margin-right: 50px;
@@ -62,18 +62,18 @@ header i {
   margin-right: auto;
 }
 
-.display-item {
+.display-deck {
   width: 65%;
   margin-left: 50px;
 }
 
-.display-item button {
+.display-deck button {
   margin-top: 20px;
   margin-left: auto;
   display: block;
 }
 
-.add-item form {
+.add-deck form {
   width: 100%;
   overflow: hidden;
 }
