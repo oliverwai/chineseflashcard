@@ -155,3 +155,10 @@ button {
   border-radius: 50%;
   max-width: 100%;
 }
+
+.link {
+  color: #fff;
+}
+.link:hover {
+  color: #fff;
+}

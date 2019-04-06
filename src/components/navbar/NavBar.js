@@ -43,7 +43,9 @@ class Navbar extends Component {
       <div className="app">
         <header>
           <div className="wrapper">
-            <h1>FlashCard</h1>
+            <Link to="/" className="link">
+              <h1>FlashCard</h1>
+            </Link>
             {this.state.user ? (
               <button onClick={this.logout}>Log Out</button>
             ) : (
