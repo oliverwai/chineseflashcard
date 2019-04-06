@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import firebase, { auth, provider } from "../../config/firebase.js";
+import { Link } from "react-router-dom";
 
 class Dashboard extends Component {
   constructor() {
@@ -96,11 +97,18 @@ class Dashboard extends Component {
                           <p>brought by: {deck.user}</p>
                           <div>
                             <button onClick={() => this.removedeck(deck.id)}>
-                              Remove deck
+                              Remove
                             </button>
-                            <button onClick={() => this.removedeck(deck.id)}>
-                              View deck
-                            </button>
+                            <Link
+                              to={{
+                                pathname: "/deck/" + deck.id,
+                                state: { id: deck.id }
+                              }}
+                              key={deck.id}
+                              className="link"
+                            >
+                              <button>View</button>
+                            </Link>
                           </div>
                         </li>
                       );
