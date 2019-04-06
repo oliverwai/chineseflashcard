@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Component } from "react";
 import firebase, { auth, provider } from "../../config/firebase.js";
-import nav from "react-bootstrap/Navbar";
+import { nav, Navbar } from "react-bootstrap/Navbar";
 
-class Navbar extends Component {
+class NavBar extends Component {
   constructor(props) {
     super(props);
     this.login = this.login.bind(this);
@@ -50,6 +50,7 @@ class Navbar extends Component {
             <Link to="/leaderboard" className="link">
               <p>Leader Board</p>
             </Link>
+            <p>Points: </p>
             {this.state.user ? (
               <button onClick={this.logout}>Log Out</button>
             ) : (
@@ -62,4 +63,4 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+export default NavBar;
