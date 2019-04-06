@@ -3,6 +3,8 @@ import "./App.css";
 import firebase, { auth, provider } from "./config/firebase.js";
 import Dashboard from "./components/dashboard/Dashboard";
 import DeckDetails from "./components/deck/DeckDetails";
+import Leaderboard from "./components/gamification/Leaderboard";
+import "react-bootstrap/dist/react-bootstrap.min.js";
 import NavBar from "./components/navbar/NavBar";
 import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 
@@ -22,6 +24,7 @@ class App extends Component {
           <Switch>
             <Route path="/" exact component={Dashboard} />
             <Route path="/deck/:id" component={DeckDetails} />
+            <Route path="/leaderboard" component={Leaderboard} />
           </Switch>
         </div>
       </BrowserRouter>
