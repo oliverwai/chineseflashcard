@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Component } from "react";
 import firebase, { auth, provider } from "../../config/firebase.js";
+import nav from "react-bootstrap/Navbar";
 
 class Navbar extends Component {
   constructor(props) {
