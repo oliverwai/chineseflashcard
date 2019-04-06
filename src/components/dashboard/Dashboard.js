@@ -32,12 +32,14 @@ class Dashboard extends Component {
       username: ""
     });
   }
+
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (user) {
         this.setState({ user });
       }
     });
+
     const decksRef = firebase.database().ref("decks");
     decksRef.on("value", snapshot => {
       let decks = snapshot.val();
@@ -54,6 +56,7 @@ class Dashboard extends Component {
       });
     });
   }
+
   removedeck(deckId) {
     const deckRef = firebase.database().ref(`/decks/${deckId}`);
     deckRef.remove();
@@ -69,14 +72,14 @@ class Dashboard extends Component {
                   <input
                     type="text"
                     name="username"
-                    placeholder="What's your name?"
+                    placeholder="Deck Name"
                     onChange={this.handleChange}
                     value={this.state.username}
                   />
                   <input
                     type="text"
                     name="currentdeck"
-                    placeholder="What are you bringing?"
+                    placeholder="Deck Info"
                     onChange={this.handleChange}
                     value={this.state.currentdeck}
                   />
@@ -91,9 +94,14 @@ class Dashboard extends Component {
                         <li key={deck.id}>
                           <h3>{deck.title}</h3>
                           <p>brought by: {deck.user}</p>
-                          <button onClick={() => this.removedeck(deck.id)}>
-                            Remove deck
-                          </button>
+                          <div>
+                            <button onClick={() => this.removedeck(deck.id)}>
+                              Remove deck
+                            </button>
+                            <button onClick={() => this.removedeck(deck.id)}>
+                              View deck
+                            </button>
+                          </div>
                         </li>
                       );
                     })}

@@ -43,7 +43,7 @@ class Navbar extends Component {
       <div className="app">
         <header>
           <div className="wrapper">
-            <h1>Chinese Language Learning</h1>
+            <h1>FlashCard</h1>
             {this.state.user ? (
               <button onClick={this.logout}>Log Out</button>
             ) : (
