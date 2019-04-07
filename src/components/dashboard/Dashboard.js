@@ -5,15 +5,18 @@ import { Link } from "react-router-dom";
 class Dashboard extends Component {
   constructor() {
     super();
+    this.ref = firebase.database().ref('decks');
+    this.unsubscribe = null;
     this.state = {
       currentdeck: "",
       username: "",
       decks: [],
       user: null
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    //this.handleChange = this.handleChange.bind(this);
+    //this.handleSubmit = this.handleSubmit.bind(this);
   }
+  /*
   handleChange(e) {
     this.setState({
       [e.target.name]: e.target.value
@@ -33,6 +36,23 @@ class Dashboard extends Component {
       username: ""
     });
   }
+*/
+  onCollectionUpdate = (querySnapshot) => {
+    const decks = [];
+    querySnapshot.forEach((doc) => {
+      const { title, description, author } = doc.data();
+      decks.push({
+        key: doc.id,
+        doc, // DocumentSnapshot
+        title,
+        description,
+        author,
+      });
+    });
+    this.setState({
+      decks
+   });
+  }
 
   componentDidMount() {
     auth.onAuthStateChanged(user => {
@@ -41,6 +61,12 @@ class Dashboard extends Component {
       }
     });
 
+    this.unsubscribe = this.ref.on("value", snapshot => {
+      this.unsubscribe = this.onCollectionUpdate;
+    });
+    //this.ref.off(this.onCollectionUpdate);
+    //this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+    /*
     const decksRef = firebase.database().ref("decks");
     decksRef.on("value", snapshot => {
       let decks = snapshot.val();
@@ -56,13 +82,52 @@ class Dashboard extends Component {
         decks: newState
       });
     });
+    */
   }
 
+  /*
   removedeck(deckId) {
     const deckRef = firebase.database().ref(`/decks/${deckId}`);
     deckRef.remove();
   }
+  */
   render() {
+
+    return (
+      <div class="container">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              BOARD LIST
+            </h3>
+          </div>
+          <div class="panel-body">
+            <h4><Link to="/create">Add Board</Link></h4>
+            <table class="table table-stripe">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Author</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.decks.map(deck =>
+                  <tr>
+                    <td><Link to={`/show/${deck.key}`}>{deck.title}</Link></td>
+                    <td>{deck.description}</td>
+                    <td>{deck.author}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
+
+
+    /*
     return (
       <div className="app">
         {this.state.user ? (
@@ -125,6 +190,7 @@ class Dashboard extends Component {
         )}
       </div>
     );
+    */
   }
 }
 export default Dashboard;
