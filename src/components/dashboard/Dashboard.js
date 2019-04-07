@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 class Dashboard extends Component {
   constructor() {
     super();
-    this.ref = firebase.database().ref('decks');
+    this.ref = firebase.firestore().collection("decks");
     this.unsubscribe = null;
     this.state = {
       currentdeck: "",
@@ -37,22 +37,22 @@ class Dashboard extends Component {
     });
   }
 */
-  onCollectionUpdate = (querySnapshot) => {
+  onCollectionUpdate = querySnapshot => {
     const decks = [];
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach(doc => {
       const { title, description, author } = doc.data();
       decks.push({
         key: doc.id,
         doc, // DocumentSnapshot
         title,
         description,
-        author,
+        author
       });
     });
     this.setState({
       decks
-   });
-  }
+    });
+  };
 
   componentDidMount() {
     auth.onAuthStateChanged(user => {
@@ -61,9 +61,8 @@ class Dashboard extends Component {
       }
     });
 
-    this.unsubscribe = this.ref.on("value", snapshot => {
-      this.unsubscribe = this.onCollectionUpdate;
-    });
+    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+
     //this.ref.off(this.onCollectionUpdate);
     //this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
     /*
@@ -92,17 +91,16 @@ class Dashboard extends Component {
   }
   */
   render() {
-
     return (
       <div class="container">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">
-              BOARD LIST
-            </h3>
+            <h3 class="panel-title">DECK LIST</h3>
           </div>
           <div class="panel-body">
-            <h4><Link to="/create">Add Board</Link></h4>
+            <h4>
+              <Link to="/create">Add Deck</Link>
+            </h4>
             <table class="table table-stripe">
               <thead>
                 <tr>
@@ -112,20 +110,28 @@ class Dashboard extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.decks.map(deck =>
+                {this.state.decks.map(deck => (
                   <tr>
-                    <td><Link to={`/show/${deck.key}`}>{deck.title}</Link></td>
+                    <td>
+                      <Link
+                        to={{
+                          pathname: "/deck/" + deck.key,
+                          state: { id: deck.key }
+                        }}
+                      >
+                        {deck.title}
+                      </Link>
+                    </td>
                     <td>{deck.description}</td>
                     <td>{deck.author}</td>
                   </tr>
-                )}
+                ))}
               </tbody>
             </table>
           </div>
         </div>
       </div>
     );
-
 
     /*
     return (

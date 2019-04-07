@@ -4,6 +4,8 @@ import firebase from "../../config/firebase.js";
 import ProgressBar from "react-bootstrap/ProgressBar";
 
 // replace this w/ flashcard info
+// @TODO: create crud app w/ table flashcards
+// then create a review for today's cards
 class DeckDetails extends Component {
   constructor() {
     super();

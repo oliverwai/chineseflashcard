@@ -1,20 +1,22 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import firebase from "../config/firebase.js";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 class Show extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      decks: {},
-      key: ''
+      deck: {},
+      key: ""
     };
   }
 
   componentDidMount() {
-    const ref = firebase.database().ref('decks').doc(this.props.match.params.id);
-    ref.get().then((doc) => {
+    const ref = firebase
+      .firestore()
+      .collection("decks")
+      .doc(this.props.match.params.id);
+    ref.get().then(doc => {
       if (doc.exists) {
         this.setState({
           deck: doc.data(),
@@ -27,13 +29,19 @@ class Show extends Component {
     });
   }
 
-  delete(id){
-    firebase.database().collection('decks').doc(id).delete().then(() => {
-      console.log("Document successfully deleted!");
-      this.props.history.push("/")
-    }).catch((error) => {
-      console.error("Error removing document: ", error);
-    });
+  delete(id) {
+    firebase
+      .firestore()
+      .collection("decks")
+      .doc(id)
+      .delete()
+      .then(() => {
+        console.log("Document successfully deleted!");
+        this.props.history.push("/");
+      })
+      .catch(error => {
+        console.error("Error removing document: ", error);
+      });
   }
 
   render() {
@@ -41,10 +49,10 @@ class Show extends Component {
       <div class="container">
         <div class="panel panel-default">
           <div class="panel-heading">
-          <h4><Link to="/">Deck List</Link></h4>
-            <h3 class="panel-title">
-              {this.state.deck.title}
-            </h3>
+            <h4>
+              <Link to="/">Deck List</Link>
+            </h4>
+            <h3 class="panel-title">{this.state.deck.title}</h3>
           </div>
           <div class="panel-body">
             <dl>
@@ -53,8 +61,16 @@ class Show extends Component {
               <dt>Author:</dt>
               <dd>{this.state.deck.author}</dd>
             </dl>
-            <Link to={`/edit/${this.state.key}`} class="btn btn-success">Edit</Link>&nbsp;
-            <button onClick={this.delete.bind(this, this.state.key)} class="btn btn-danger">Delete</button>
+            <Link to={`/edit/${this.state.key}`} class="btn btn-success">
+              Edit
+            </Link>
+            &nbsp;
+            <button
+              onClick={this.delete.bind(this, this.state.key)}
+              class="btn btn-danger"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </div>
