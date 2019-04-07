@@ -19,15 +19,18 @@ class Navbar extends Component {
         user: null
       });
     });
+    window.location.reload();
   }
 
-  login() {
-    auth.signInWithPopup(provider).then(result => {
+  async login() {
+    await auth.signInWithPopup(provider).then(result => {
       const user = result.user;
       this.setState({
         user
       });
     });
+
+    window.location.reload()
   }
 
   componentDidMount() {
