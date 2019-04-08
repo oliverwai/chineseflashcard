@@ -126,6 +126,8 @@ class Dashboard extends Component {
   */
   render() {
     return (
+      <div>
+      {this.state.user ? (
       <div class="container">
         <section className="add-deck">
           <form onSubmit={this.onSubmit}>
@@ -187,7 +189,7 @@ class Dashboard extends Component {
                       <Link
                         to={{
                           pathname: "/deck/" + deck.key,
-                          state: { id: deck.key }
+                          state: { id: deck.key, user: this.state.user.id }
                         }}
                       >
                         {deck.title}
@@ -202,7 +204,13 @@ class Dashboard extends Component {
           </div>
         </section>
       </div>
-    );
+    ) : (
+      <div className="wrapper">
+        <p>You must be logged in to see your deck list and add to it</p>
+      </div>
+    )}
+  </div>
+);
 
     /*
     return (
