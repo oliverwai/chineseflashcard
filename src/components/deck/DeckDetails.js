@@ -9,6 +9,7 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 class DeckDetails extends Component {
   constructor() {
     super();
+    this.unsubscribe = null;
 
     this.ref = firebase.firestore().collection("flashcards");
     this.state ={
@@ -18,29 +19,29 @@ class DeckDetails extends Component {
       english: "",
       pinyin: "",
       hanzi: "",
-      deck: "",
+      deckid: ""
     }
   }
 
   onSubmit = e => {
     e.preventDefault();
-  
-    const { english, pinyin, hanzi,deck} = this.state;
-    const { id } = this.props.location.state;
-  
+
+    const id = this.props.location.state.id;
+    const { english, pinyin, hanzi, deckid} = this.state;
+    
     this.ref
       .add({
         english,
         pinyin,
         hanzi,
-        deck
+        deckid,
       })
       .then(docRef => {
         this.setState({
           english: "",
           pinyin: "",
           hanzi: "",
-          deck: {id}
+          deckid: id
         });
         //this.props.history.push("/");
       })
@@ -57,16 +58,16 @@ class DeckDetails extends Component {
 
     onCollectionUpdate = querySnapshot => {
       const cards = [];
-      const id = this.props.location.state;
+      //const id = this.props.location.state;
       querySnapshot.forEach(doc => {
-        const { english, pinyin, hanzi, deck } = doc.data();
+        const { english, pinyin, hanzi, deckid } = doc.data();
         cards.push({
           key: doc.id,
           doc, // DocumentSnapshot
           english,
           pinyin,
           hanzi,
-          deck,
+          deckid,
         });
       });
       this.setState({
@@ -75,13 +76,19 @@ class DeckDetails extends Component {
     };
 
     componentDidMount() {
+      /*
       auth.onAuthStateChanged(user => {
         if (user) {
           this.setState({ user });
         }
       });
-  
-      //this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+      */
+     const { id } = this.props.location.state;
+     if(id){
+       this.setState({deckid: id});
+     }
+
+      this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
     }
 
   render() {
@@ -140,8 +147,8 @@ class DeckDetails extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.cards.filter(card => card.deck == {id}).map(card => (
-                  <tr key = {id}>
+                {this.state.cards.filter(card => card.deckid === id).map(card => (
+                  <tr key = {card.id}>
                     <td>{card.english}</td>
                     <td>{card.pinyin}</td>
                     <td>{card.hanzi}</td>
