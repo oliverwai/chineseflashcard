@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Component } from "react";
 import firebase, { auth, provider } from "../../config/firebase.js";
-import { nav, Navbar } from "react-bootstrap/Navbar";
 
 class NavBar extends Component {
   constructor(props) {
@@ -31,7 +30,7 @@ class NavBar extends Component {
       });
     });
 
-    window.location.reload()
+    window.location.reload();
   }
 
   componentDidMount() {
@@ -42,6 +41,8 @@ class NavBar extends Component {
     });
   }
 
+  /*
+  
   render() {
     return (
       <div className="app">
@@ -62,6 +63,43 @@ class NavBar extends Component {
           </div>
         </header>
       </div>
+    );
+  }
+  */
+
+  render() {
+    return (
+      <nav>
+        <div class="nav-wrapper grey darken-3">
+          <Link to="/" className="link brand-logo">
+            Chinese Flashcards
+          </Link>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li>
+              <Link to="/leaderboard" className="link">
+                Leader Board
+              </Link>
+            </li>
+            <li>
+              {this.state.user ? (
+                <button
+                  class="waves-effect waves-light btn green"
+                  onClick={this.logout}
+                >
+                  Log Out
+                </button>
+              ) : (
+                <button
+                  class="waves-effect waves-light btn green"
+                  onClick={this.login}
+                >
+                  Log In
+                </button>
+              )}
+            </li>
+          </ul>
+        </div>
+      </nav>
     );
   }
 }
