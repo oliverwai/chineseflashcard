@@ -9,7 +9,7 @@ import NavBar from "./components/navbar/NavBar";
 import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import Edit from "./components/Edit";
 import Create from "./components/Create";
-import Show from "./components/Show";
+import Review from "./components/Review";
 
 class App extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class App extends Component {
             <Route path="/" exact component={Dashboard} />
             <Route path="/edit/:id" component={Edit} />
             <Route path="/create" component={Create} />
-            <Route path="/show/:id" componrent={Show} />
+            <Route path="/review/:id" component={Review} />
             <Route path="/deck/:id" component={DeckDetails} />
             <Route path="/leaderboard" component={Leaderboard} />
           </Switch>

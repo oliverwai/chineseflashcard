@@ -13,33 +13,40 @@ class DeckDetails extends Component {
 
   render() {
     return (
-      <div className="wrapper">
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Oli</td>
-              <td>3218</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Ben</td>
-              <td>1402</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Jon</td>
-              <td>8702</td>
-            </tr>
-          </tbody>
-        </Table>
+      <div class="container">
+        <section className="display-deck">
+          <div class="panel-heading">
+            <h3 class="panel-title">LEADERBOARD</h3>
+          </div>
+          <div class="panel-body">
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Oli</td>
+                  <td>3500</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Ben</td>
+                  <td>1200</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Jon</td>
+                  <td>800</td>
+                </tr>
+              </tbody>
+            </Table>
+          </div>
+        </section>
       </div>
     );
   }

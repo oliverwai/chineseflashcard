@@ -41,28 +41,28 @@ class Dashboard extends Component {
     });
   }
   */
- onSubmit = e => {
-  e.preventDefault();
+  onSubmit = e => {
+    e.preventDefault();
 
-  const { title, description, author } = this.state;
+    const { title, description, author } = this.state;
 
-  this.ref
-    .add({
-      title,
-      description,
-      author
-    })
-    .then(docRef => {
-      this.setState({
-        title: "",
-        description: "",
-        author: ""
+    this.ref
+      .add({
+        title,
+        description,
+        author
+      })
+      .then(docRef => {
+        this.setState({
+          title: "",
+          description: "",
+          author: ""
+        });
+        //this.props.history.push("/");
+      })
+      .catch(error => {
+        console.error("Error adding document: ", error);
       });
-      //this.props.history.push("/");
-    })
-    .catch(error => {
-      console.error("Error adding document: ", error);
-    });
   };
 
   onChange = e => {
@@ -118,6 +118,21 @@ class Dashboard extends Component {
     */
   }
 
+  delete(id) {
+    firebase
+      .firestore()
+      .collection("decks")
+      .doc(id)
+      .delete()
+      .then(() => {
+        console.log("Document successfully deleted!");
+        this.props.history.push("/");
+      })
+      .catch(error => {
+        console.error("Error removing document: ", error);
+      });
+  }
+
   /*
   removedeck(deckId) {
     const deckRef = firebase.database().ref(`/decks/${deckId}`);
@@ -127,10 +142,10 @@ class Dashboard extends Component {
   render() {
     return (
       <div>
-      {this.state.user ? (
-      <div class="container">
-        <section className="add-deck">
-          <form onSubmit={this.onSubmit}>
+        {this.state.user ? (
+          <div class="container">
+            <section className="add-deck">
+              <form onSubmit={this.onSubmit}>
                 <div class="form-group">
                   <label for="title">Title:</label>
                   <input
@@ -144,73 +159,69 @@ class Dashboard extends Component {
                 </div>
                 <div class="form-group">
                   <label for="description">Description:</label>
-                  <textArea
-                    class="form-control"
-                    name="description"
-                    onChange={this.onChange}
-                    placeholder="Description"
-                    cols="80"
-                    rows="3"
-                  >
-                    {this.state.description}
-                  </textArea>
-                </div>
-                <div class="form-group">
-                  <label for="author">Author:</label>
                   <input
                     type="text"
                     class="form-control"
-                    name="author"
-                    value={this.state.author}
+                    name="description"
+                    value={this.state.description}
                     onChange={this.onChange}
-                    placeholder="Author"
+                    placeholder="Description"
                   />
                 </div>
-              <button>Add Deck</button>
-            </form>
-          </section>
-        <section className="display-deck">
-          <div class="panel-heading">
-            <h3 class="panel-title">DECK LIST</h3>
+                <button class="btn blue">Add Deck</button>
+              </form>
+            </section>
+            <section className="display-deck">
+              <div class="panel-heading">
+                <h3 class="panel-title">DECK LIST</h3>
+              </div>
+              <div class="panel-body">
+                <table class="highlight">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th> </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.decks.map(deck => (
+                      <tr>
+                        <td>
+                          <Link
+                            to={{
+                              pathname: "/deck/" + deck.key,
+                              state: { id: deck.key, user: this.state.user.id }
+                            }}
+                          >
+                            {deck.title}
+                          </Link>
+                        </td>
+                        <td>{deck.description}</td>
+                        <td>
+                          <div class="left">
+                            <button
+                              onClick={this.delete.bind(this, deck.key)}
+                              class="btn btn-danger"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
           </div>
-          <div class="panel-body">
-            <table class="table table-stripe">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Description</th>
-                  <th>Author</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.decks.map(deck => (
-                  <tr>
-                    <td>
-                      <Link
-                        to={{
-                          pathname: "/deck/" + deck.key,
-                          state: { id: deck.key, user: this.state.user.id }
-                        }}
-                      >
-                        {deck.title}
-                      </Link>
-                    </td>
-                    <td>{deck.description}</td>
-                    <td>{deck.author}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        ) : (
+          <div className="wrapper">
+            <p>You must be logged in to see your deck list and add to it</p>
           </div>
-        </section>
+        )}
       </div>
-    ) : (
-      <div className="wrapper">
-        <p>You must be logged in to see your deck list and add to it</p>
-      </div>
-    )}
-  </div>
-);
+    );
 
     /*
     return (
