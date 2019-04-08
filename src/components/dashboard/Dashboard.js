@@ -11,7 +11,10 @@ class Dashboard extends Component {
       currentdeck: "",
       username: "",
       decks: [],
-      user: null
+      user: null,
+      title: "",
+      description: "",
+      author: ""
     };
     //this.handleChange = this.handleChange.bind(this);
     //this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,6 +25,7 @@ class Dashboard extends Component {
       [e.target.name]: e.target.value
     });
   }
+  
 
   handleSubmit(e) {
     e.preventDefault();
@@ -36,7 +40,37 @@ class Dashboard extends Component {
       username: ""
     });
   }
-*/
+  */
+ onSubmit = e => {
+  e.preventDefault();
+
+  const { title, description, author } = this.state;
+
+  this.ref
+    .add({
+      title,
+      description,
+      author
+    })
+    .then(docRef => {
+      this.setState({
+        title: "",
+        description: "",
+        author: ""
+      });
+      //this.props.history.push("/");
+    })
+    .catch(error => {
+      console.error("Error adding document: ", error);
+    });
+  };
+
+  onChange = e => {
+    const state = this.state;
+    state[e.target.name] = e.target.value;
+    this.setState(state);
+  };
+
   onCollectionUpdate = querySnapshot => {
     const decks = [];
     querySnapshot.forEach(doc => {
@@ -93,14 +127,51 @@ class Dashboard extends Component {
   render() {
     return (
       <div class="container">
-        <div class="panel panel-default">
+        <section className="add-deck">
+          <form onSubmit={this.onSubmit}>
+                <div class="form-group">
+                  <label for="title">Title:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="title"
+                    value={this.state.title}
+                    onChange={this.onChange}
+                    placeholder="Title"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="description">Description:</label>
+                  <textArea
+                    class="form-control"
+                    name="description"
+                    onChange={this.onChange}
+                    placeholder="Description"
+                    cols="80"
+                    rows="3"
+                  >
+                    {this.state.description}
+                  </textArea>
+                </div>
+                <div class="form-group">
+                  <label for="author">Author:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="author"
+                    value={this.state.author}
+                    onChange={this.onChange}
+                    placeholder="Author"
+                  />
+                </div>
+              <button>Add Deck</button>
+            </form>
+          </section>
+        <section className="display-deck">
           <div class="panel-heading">
             <h3 class="panel-title">DECK LIST</h3>
           </div>
           <div class="panel-body">
-            <h4>
-              <Link to="/create">Add Deck</Link>
-            </h4>
             <table class="table table-stripe">
               <thead>
                 <tr>
@@ -129,7 +200,7 @@ class Dashboard extends Component {
               </tbody>
             </table>
           </div>
-        </div>
+        </section>
       </div>
     );
 
