@@ -83,13 +83,6 @@ class DeckDetails extends Component {
   };
 
   componentDidMount() {
-    /*
-      auth.onAuthStateChanged(user => {
-        if (user) {
-          this.setState({ user });
-        }
-      });
-      */
     const { id } = this.props.location.state;
     if (id) {
       this.setState({ deckid: id });
@@ -100,6 +93,8 @@ class DeckDetails extends Component {
 
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   }
+
+
 
   render() {
     const { id } = this.props.location.state;

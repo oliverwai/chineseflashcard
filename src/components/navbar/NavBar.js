@@ -64,32 +64,6 @@ class NavBar extends Component {
     });
   }
 
-  /*
-  
-  render() {
-    return (
-      <div className="app">
-        <header>
-          <div className="wrapper">
-            <Link to="/" className="link">
-              <h1>FlashCard</h1>
-            </Link>
-            <Link to="/leaderboard" className="link">
-              <p>Leader Board</p>
-            </Link>
-            <p>Points: </p>
-            {this.state.user ? (
-              <button onClick={this.logout}>Log Out</button>
-            ) : (
-              <button onClick={this.login}>Log In</button>
-            )}
-          </div>
-        </header>
-      </div>
-    );
-  }
-  */
-
   render() {
     return (
       <nav>

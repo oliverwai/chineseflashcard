@@ -14,7 +14,6 @@ class Dashboard extends Component {
       user: null,
       title: "",
       description: "",
-      author: ""
     };
     //this.handleChange = this.handleChange.bind(this);
     //this.handleSubmit = this.handleSubmit.bind(this);
@@ -44,19 +43,18 @@ class Dashboard extends Component {
   onSubmit = e => {
     e.preventDefault();
 
-    const { title, description, author } = this.state;
-
+    const { title, description} = this.state;
+    const uid= firebase.auth().currentUser.uid
     this.ref
       .add({
         title,
         description,
-        author
+        uid
       })
       .then(docRef => {
         this.setState({
           title: "",
           description: "",
-          author: ""
         });
         //this.props.history.push("/");
       })
@@ -131,18 +129,6 @@ class Dashboard extends Component {
       .catch(error => {
         console.error("Error removing document: ", error);
       });
-    firebase
-      .firestore()
-      .collection("decks")
-      .doc(id)
-      .delete()
-      .then(() => {
-        console.log("Document successfully deleted!");
-        this.props.history.push("/");
-      })
-      .catch(error => {
-        console.error("Error removing document: ", error);
-      }); 
   }
 
   /*
