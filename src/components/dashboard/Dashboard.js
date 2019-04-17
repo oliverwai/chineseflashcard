@@ -7,6 +7,7 @@ class Dashboard extends Component {
     super();
     this.ref = firebase.firestore().collection("decks");
     this.unsubscribe = null;
+    // const uid= firebase.auth().currentUser.uid
     this.state = {
       currentdeck: "",
       username: "",
@@ -14,6 +15,7 @@ class Dashboard extends Component {
       user: null,
       title: "",
       description: "",
+      uid: null
     };
     //this.handleChange = this.handleChange.bind(this);
     //this.handleSubmit = this.handleSubmit.bind(this);
@@ -43,8 +45,7 @@ class Dashboard extends Component {
   onSubmit = e => {
     e.preventDefault();
 
-    const { title, description} = this.state;
-    const uid= firebase.auth().currentUser.uid
+    const { title, description, uid} = this.state;
     this.ref
       .add({
         title,
@@ -69,20 +70,25 @@ class Dashboard extends Component {
     this.setState(state);
   };
 
-  onCollectionUpdate = querySnapshot => {
+  onCollectionUpdate = e => {
     const decks = [];
-    querySnapshot.forEach(doc => {
-      const { title, description, author } = doc.data();
-      decks.push({
-        key: doc.id,
-        doc, // DocumentSnapshot
-        title,
-        description,
-        author
-      });
-    });
-    this.setState({
-      decks
+    this.ref
+      .where('uid', '==', this.state.uid)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const { title, description, author } = doc.data();
+          decks.push({
+            key: doc.id,
+            doc, // DocumentSnapshot
+            title,
+            description,
+            author
+          });
+        });
+        this.setState({
+          decks
+        });
     });
   };
 
@@ -90,6 +96,8 @@ class Dashboard extends Component {
     auth.onAuthStateChanged(user => {
       if (user) {
         this.setState({ user });
+        this.setState({uid: firebase.auth().currentUser.uid })
+        // console.log(this.state.uid)
       }
     });
 

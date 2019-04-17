@@ -67,19 +67,25 @@ class DeckDetails extends Component {
     //cards
     const cards = [];
     //const id = this.props.location.state;
-    querySnapshot.forEach(doc => {
-      const { english, pinyin, hanzi, deckid } = doc.data();
-      cards.push({
-        key: doc.id,
-        doc, // DocumentSnapshot
-        english,
-        pinyin,
-        hanzi,
-        deckid,
-      });
-    });
-    this.setState({
-      cards
+
+    this.ref
+      .where('deckid', '==', this.state.deckid)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const { english, pinyin, hanzi, deckid } = doc.data();
+          cards.push({
+            key: doc.id,
+            doc, // DocumentSnapshot
+            english,
+            pinyin,
+            hanzi,
+            deckid,
+          });
+        });
+        this.setState({
+          cards
+        });
     });
   };
 
@@ -180,7 +186,6 @@ class DeckDetails extends Component {
                 </thead>
                 <tbody>
                   {this.state.cards
-                    .filter(card => card.deckid === id)
                     .map(card => (
                       <tr key={card.id}>
                         <td>{card.english}</td>
