@@ -7,9 +7,35 @@ import Table from "react-bootstrap/Table";
 class DeckDetails extends Component {
   constructor() {
     super();
+    this.ref = firebase.firestore().collection("users");
+    this.state = {
+      leader: [],
+      dsiplayName: "",
+      points: 0
+    };
   }
 
-  componentDidMount() {}
+
+  onCollectionUpdate = querySnapshot => {
+    const leader = [];
+    
+      querySnapshot.forEach(doc => {
+        const { displayName, points } = doc.data();
+        leader.push({
+          key: doc.id,
+          doc, // DocumentSnapshot
+          displayName,
+          points
+        });
+      });
+      this.setState({
+        leader
+      });
+  };
+
+  componentDidMount() {
+    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+  }
 
   render() {
     return (
@@ -22,27 +48,17 @@ class DeckDetails extends Component {
             <Table striped bordered hover>
               <thead>
                 <tr>
-                  <th>#</th>
                   <th>Name</th>
                   <th>Score</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Oli</td>
-                  <td>3500</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Ben</td>
-                  <td>1200</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Jon</td>
-                  <td>800</td>
-                </tr>
+                {this.state.leader.map(leader => (
+                  <tr>
+                    <td>{leader.displayName}</td>
+                    <td>{leader.points}</td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
           </div>

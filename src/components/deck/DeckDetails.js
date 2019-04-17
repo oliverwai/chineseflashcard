@@ -63,7 +63,7 @@ class DeckDetails extends Component {
     this.setState(state);
   };
 
-  onCollectionUpdate = querySnapshot => {
+  onCollectionUpdate = e => {
     //cards
     const cards = [];
     //const id = this.props.location.state;
