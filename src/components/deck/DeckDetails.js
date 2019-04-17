@@ -32,7 +32,9 @@ class DeckDetails extends Component {
 
     const id = this.props.location.state.id;
     const { english, pinyin, hanzi, deckid, sm } = this.state;
-    const uid= firebase.auth().currentUser.uid
+    const uid= firebase.auth().currentUser.uid;
+    const cardCreateDate = Date.now(); 
+    const nextReviewDate = Date.now();
     this.ref
       .add({
         english,
@@ -40,7 +42,9 @@ class DeckDetails extends Component {
         hanzi,
         deckid,
         sm,
-        uid
+        uid,
+        cardCreateDate,
+        nextReviewDate
       })
       .then(docRef => {
         this.setState({

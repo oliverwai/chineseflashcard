@@ -149,40 +149,40 @@ class Dashboard extends Component {
     return (
       <div>
         {this.state.user ? (
-          <div class="container">
+          <div className="container">
             <section className="add-deck">
               <form onSubmit={this.onSubmit}>
-                <div class="form-group">
+                <div className="form-group">
                   <label for="title">Title:</label>
                   <input
                     type="text"
-                    class="form-control"
+                    className="form-control"
                     name="title"
                     value={this.state.title}
                     onChange={this.onChange}
                     placeholder="Title"
                   />
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <label for="description">Description:</label>
                   <input
                     type="text"
-                    class="form-control"
+                    className="form-control"
                     name="description"
                     value={this.state.description}
                     onChange={this.onChange}
                     placeholder="Description"
                   />
                 </div>
-                <button class="btn blue">Add Deck</button>
+                <button className="btn blue">Add Deck</button>
               </form>
             </section>
             <section className="display-deck">
-              <div class="panel-heading">
-                <h3 class="panel-title">DECK LIST</h3>
+              <div className="panel-heading">
+                <h3 className="panel-title">DECK LIST</h3>
               </div>
-              <div class="panel-body">
-                <table class="highlight">
+              <div className="panel-body">
+                <table className="highlight">
                   <thead>
                     <tr>
                       <th>Title</th>
@@ -205,10 +205,10 @@ class Dashboard extends Component {
                         </td>
                         <td>{deck.description}</td>
                         <td>
-                          <div class="left">
+                          <div className="left">
                             <button
                               onClick={this.delete.bind(this, deck.key)}
-                              class="btn btn-danger"
+                              className="btn btn-danger"
                             >
                               Delete
                             </button>

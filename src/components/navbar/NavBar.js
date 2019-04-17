@@ -67,11 +67,11 @@ class NavBar extends Component {
   render() {
     return (
       <nav>
-        <div class="nav-wrapper">
+        <div className="nav-wrapper">
           <Link to="/" className="link brand-logo">
             Chinese Flashcards
           </Link>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <ul id="nav-mobile" className="right hide-on-med-and-down">
             <li>
               <Link to="/leaderboard" className="link">
                 Leaderboard
@@ -80,14 +80,14 @@ class NavBar extends Component {
             <li>
               {this.state.user ? (
                 <button
-                  class="waves-effect waves-light btn green lighten-2"
+                  className="waves-effect waves-light btn green lighten-2"
                   onClick={this.logout}
                 >
                   Log Out
                 </button>
               ) : (
                 <button
-                  class="waves-effect waves-light btn green lighten-2"
+                  className="waves-effect waves-light btn green lighten-2"
                   onClick={this.login}
                 >
                   Log In
