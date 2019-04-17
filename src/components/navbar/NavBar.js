@@ -9,14 +9,16 @@ class NavBar extends Component {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.state = {
-      user: null
+      user: null,
+      newuser: ""
     };
   }
 
   logout() {
     auth.signOut().then(() => {
       this.setState({
-        user: null
+        user: null,
+        newuser: false
       });
     });
     window.location.reload();
@@ -25,12 +27,33 @@ class NavBar extends Component {
   async login() {
     await auth.signInWithPopup(provider).then(result => {
       const user = result.user;
+      var newuser =result.additionalUserInfo.isNewUser;
       this.setState({
-        user
+        user,
+        newuser
       });
-    });
 
-    window.location.reload();
+      var docRef = firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid);
+      var o = {};
+        if (newuser) {
+            //user is already there, write only last login
+            o.displayName = firebase.auth().currentUser.displayName;
+            o.email = user.email;
+            o.accountCreatedDate = Date.now();
+            o.lastLoginDate = Date.now();
+            o.points = 0;
+            docRef.set(o);
+            console.log("new user")
+        }
+        else {
+            //new user
+            // Send it
+            o.lastLoginDate = Date.now();
+            docRef.set(o);
+            console.log("old user")
+
+        }
+    });
   }
 
   componentDidMount() {

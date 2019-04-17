@@ -22,7 +22,8 @@ class DeckDetails extends Component {
       pinyin: "",
       hanzi: "",
       deckid: "",
-      title: ""
+      title: "",
+      sm: 0
     };
   }
 
@@ -30,21 +31,23 @@ class DeckDetails extends Component {
     e.preventDefault();
 
     const id = this.props.location.state.id;
-    const { english, pinyin, hanzi, deckid } = this.state;
+    const { english, pinyin, hanzi, deckid, sm } = this.state;
 
     this.ref
       .add({
         english,
         pinyin,
         hanzi,
-        deckid
+        deckid,
+        sm
       })
       .then(docRef => {
         this.setState({
           english: "",
           pinyin: "",
           hanzi: "",
-          deckid: id
+          deckid: id,
+          sm: 0
         });
         //this.props.history.push("/");
       })
@@ -71,7 +74,7 @@ class DeckDetails extends Component {
         english,
         pinyin,
         hanzi,
-        deckid
+        deckid,
       });
     });
     this.setState({

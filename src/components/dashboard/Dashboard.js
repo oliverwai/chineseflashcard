@@ -131,6 +131,18 @@ class Dashboard extends Component {
       .catch(error => {
         console.error("Error removing document: ", error);
       });
+    firebase
+      .firestore()
+      .collection("decks")
+      .doc(id)
+      .delete()
+      .then(() => {
+        console.log("Document successfully deleted!");
+        this.props.history.push("/");
+      })
+      .catch(error => {
+        console.error("Error removing document: ", error);
+      }); 
   }
 
   /*
