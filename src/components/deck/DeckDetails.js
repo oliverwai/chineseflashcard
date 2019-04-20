@@ -32,8 +32,8 @@ class DeckDetails extends Component {
 
     const id = this.props.location.state.id;
     const { english, pinyin, hanzi, deckid, sm } = this.state;
-    const uid= firebase.auth().currentUser.uid;
-    const cardCreateDate = Date.now(); 
+    const uid = firebase.auth().currentUser.uid;
+    const cardCreateDate = Date.now();
     const nextReviewDate = Date.now();
     this.ref
       .add({
@@ -67,13 +67,13 @@ class DeckDetails extends Component {
     this.setState(state);
   };
 
-  onCollectionUpdate = e => {
+  onCollectionUpdate = querySnapshot => {
     //cards
     const cards = [];
     //const id = this.props.location.state;
 
     this.ref
-      .where('deckid', '==', this.state.deckid)
+      .where("deckid", "==", this.state.deckid)
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
@@ -84,19 +84,20 @@ class DeckDetails extends Component {
             english,
             pinyin,
             hanzi,
-            deckid,
+            deckid
           });
         });
         this.setState({
           cards
         });
-    });
+      });
   };
 
   componentDidMount() {
     const { id } = this.props.location.state;
     if (id) {
       this.setState({ deckid: id });
+      this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
     }
 
     const cards = [];
@@ -104,8 +105,6 @@ class DeckDetails extends Component {
 
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   }
-
-
 
   render() {
     const { id } = this.props.location.state;
@@ -189,14 +188,13 @@ class DeckDetails extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.cards
-                    .map(card => (
-                      <tr key={card.id}>
-                        <td>{card.english}</td>
-                        <td>{card.pinyin}</td>
-                        <td>{card.hanzi}</td>
-                      </tr>
-                    ))}
+                  {this.state.cards.map(card => (
+                    <tr key={card.id}>
+                      <td>{card.english}</td>
+                      <td>{card.pinyin}</td>
+                      <td>{card.hanzi}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

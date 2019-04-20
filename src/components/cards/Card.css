@@ -1,6 +1,6 @@
 .card-container {
   cursor: pointer;
-  height: 400px;
+  height: 300px;
   width: 400px;
   perspective: 800px;
   position: relative;
@@ -9,8 +9,8 @@
 }
 
 .card {
-  height: 400px;
-  width: 400px;
+  height: 300px;
+  width: 500px;
   position: absolute;
   border: 1px solid #300;
   transform-style: preserve-3d;
@@ -23,36 +23,42 @@
 }
 
 .card .front {
-  height: 400px;
-  width: 400px;
+  height: 300px;
+  width: 500px;
   backface-visibility: hidden;
   position: absolute;
   overflow: hidden;
   text-align: center;
-  background-color: rgba(255, 251, 251, 1);
+
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.25);
+  background-color: #fff;
+  border: none;
 }
 
 .card .back {
-  height: 400px;
-  width: 400px;
+  height: 300px;
+  width: 500px;
   text-align: center;
   transform: rotateY(180deg);
+
+  position: relative;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.25);
 }
 
 .eng {
   color: #333;
   font-size: 2.3em;
-  padding-top: 40%;
+  padding-top: 25%;
 }
 
 .han {
   color: #333;
-  font-size: 6.3em;
+  font-size: 2.3em;
   padding-top: 20%;
 }
 
 .pin {
   color: rgba(200, 10, 10, 1);
   font-size: 2.3em;
-  padding-top: 10%;
+  padding-top: 5%;
 }

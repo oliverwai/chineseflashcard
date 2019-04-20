@@ -45,7 +45,7 @@ class Dashboard extends Component {
   onSubmit = e => {
     e.preventDefault();
 
-    const { title, description, uid} = this.state;
+    const { title, description, uid } = this.state;
     this.ref
       .add({
         title,
@@ -55,7 +55,7 @@ class Dashboard extends Component {
       .then(docRef => {
         this.setState({
           title: "",
-          description: "",
+          description: ""
         });
         //this.props.history.push("/");
       })
@@ -70,10 +70,10 @@ class Dashboard extends Component {
     this.setState(state);
   };
 
-  onCollectionUpdate = e => {
+  onCollectionUpdate = querySnapshot => {
     const decks = [];
     this.ref
-      .where('uid', '==', this.state.uid)
+      .where("uid", "==", this.state.uid)
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
@@ -89,14 +89,15 @@ class Dashboard extends Component {
         this.setState({
           decks
         });
-    });
+      });
   };
 
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (user) {
         this.setState({ user });
-        this.setState({uid: firebase.auth().currentUser.uid })
+        this.setState({ uid: firebase.auth().currentUser.uid });
+        this.onCollectionUpdate();
         // console.log(this.state.uid)
       }
     });

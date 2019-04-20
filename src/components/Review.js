@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import firebase, { auth } from "../config/firebase";
+import Card from "./cards/Card";
 
 class Review extends Component {
   constructor() {
@@ -10,37 +11,44 @@ class Review extends Component {
     this.ref = firebase.firestore().collection("flashcards");
     this.query = this.ref.where("capital", "==", true);
 
+    const cards = [];
+
     this.state = {
-      cards: [],
+      cards: cards,
       user: null,
-      currentcard: "",
       english: "",
       pinyin: "",
       hanzi: "",
       deckid: "",
       title: "",
-      currentCard: {}
+      currentCard: {},
+      count: 0
     };
   }
 
   onCollectionUpdate = querySnapshot => {
     //cards
     const cards = [];
-    //const id = this.props.location.state;
-    querySnapshot.forEach(doc => {
-      const { english, pinyin, hanzi, deckid } = doc.data();
-      cards.push({
-        key: doc.id,
-        doc, // DocumentSnapshot
-        english,
-        pinyin,
-        hanzi,
-        deckid
+
+    this.ref
+      .where("deckid", "==", this.state.deckid)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const { english, pinyin, hanzi, deckid } = doc.data();
+          cards.push({
+            // key: doc.id,
+            doc, // DocumentSnapshot
+            english,
+            pinyin,
+            hanzi,
+            deckid
+          });
+        });
+        this.setState({
+          cards
+        });
       });
-    });
-    this.setState({
-      cards
-    });
   };
 
   componentDidMount() {
@@ -55,66 +63,63 @@ class Review extends Component {
     if (id) {
       this.setState({ deckid: id });
     }
-
-    const cards = [];
-    //const id = this.props.location.state;
-
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   }
+
+  handleClick = () => {
+    this.setState(({ count }) => ({
+      count: count + 1
+    }));
+  };
 
   render() {
     const { id } = this.props.location.state;
 
-    return (
-      // Back Button Layer
-      <div>
-        <div class="container">
-          <div class="back-button">
-            <Link
-              to={{
-                pathname: "/deck/" + id,
-                state: { id: id }
-              }}
-            >
-              <button class="btn-floating btn-large waves-effect waves-light blue">
-                <i class="material-icons">arrow_back</i>
+    if (typeof this.state.cards[this.state.count] !== "undefined") {
+      // console.log(this.state.cards[0]["english"]);
+      return (
+        <div>
+          <div className="container">
+            <div className="back-button">
+              <Link
+                to={{
+                  pathname: "/deck/" + id,
+                  state: { id: id }
+                }}
+              >
+                <button className="btn-floating btn-large waves-effect waves-light blue">
+                  <i className="material-icons">arrow_back</i>
+                </button>
+              </Link>
+            </div>
+          </div>
+
+          <div className="container">
+            <Card
+              eng={this.state.cards[this.state.count]["english"]}
+              han={this.state.cards[this.state.count]["hanzi"]}
+              pin={this.state.cards[this.state.count]["pinyin"]}
+            />
+          </div>
+
+          <div>
+            <div className="row">
+              <button className="btn" onClick={this.handleClick}>
+                Next
               </button>
-            </Link>
+            </div>
+            <div className="row">
+              <button className="btn">Easy</button>
+              <button className="btn">Good</button>
+              <button className="btn">Okay</button>
+              <button className="btn">Hard</button>
+            </div>
           </div>
         </div>
+      );
+    }
 
-        {/* Flashcard Layer */}
-        <div class="container">
-          <section className="display-deck">
-            <div class="panel-heading">
-              <h3 class="panel-title">Cards</h3>
-            </div>
-            <div class="panel-body">
-              <table class="table table-stripe">
-                <thead>
-                  <tr>
-                    <th>English</th>
-                    <th>Pinyin</th>
-                    <th>Chinese</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.cards
-                    .filter(card => card.deckid === id)
-                    .map(card => (
-                      <tr key={card.id}>
-                        <td>{card.english}</td>
-                        <td>{card.pinyin}</td>
-                        <td>{card.hanzi}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-        </div>
-      </div>
-    );
+    return <div />;
   }
 }
 
