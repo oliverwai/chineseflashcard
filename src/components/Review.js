@@ -37,7 +37,7 @@ class Review extends Component {
         querySnapshot.forEach(doc => {
           const { english, pinyin, hanzi, deckid } = doc.data();
           cards.push({
-            // key: doc.id,
+            key: doc.id,
             doc, // DocumentSnapshot
             english,
             pinyin,
@@ -101,14 +101,17 @@ class Review extends Component {
               pin={this.state.cards[this.state.count]["pinyin"]}
             />
           </div>
-
+          <div className="clear-10" />
           <div>
-            <div className="row">
+            <div className="button-container">
+              <button className="btn" onClick={this.handleClick}>
+                Last
+              </button>
               <button className="btn" onClick={this.handleClick}>
                 Next
               </button>
             </div>
-            <div className="row">
+            <div className="button-container">
               <button className="btn">Easy</button>
               <button className="btn">Good</button>
               <button className="btn">Okay</button>
@@ -117,9 +120,9 @@ class Review extends Component {
           </div>
         </div>
       );
+    } else {
+      return <div />;
     }
-
-    return <div />;
   }
 }
 

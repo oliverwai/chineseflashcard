@@ -1,7 +1,7 @@
 .card-container {
   cursor: pointer;
   height: 300px;
-  width: 400px;
+  width: 500px;
   perspective: 800px;
   position: relative;
   margin: auto;

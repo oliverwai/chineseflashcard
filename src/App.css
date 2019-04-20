@@ -143,3 +143,15 @@ form button {
   width: 65%;
   vertical-align: middle;
 }
+
+.button-container {
+  max-width: 500px;
+  margin: auto;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.clear-10 {
+  margin-bottom: 20px;
+}
