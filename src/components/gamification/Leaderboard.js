@@ -15,6 +15,7 @@ class DeckDetails extends Component {
     };
   }
 
+  // unshift moves the item the front, so highest point =top
   onCollectionUpdate = querySnapshot => {
     const leader = [];
 

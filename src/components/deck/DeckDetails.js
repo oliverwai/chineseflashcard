@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import firebase, { auth } from "../../config/firebase.js";
-import ProgressBar from "react-bootstrap/ProgressBar";
 
 // replace this w/ flashcard info
 // @TODO: create crud app w/ table flashcards
@@ -22,8 +21,7 @@ class DeckDetails extends Component {
       pinyin: "",
       hanzi: "",
       deckid: "",
-      title: "",
-      sm: 0
+      title: ""
     };
   }
 
@@ -35,24 +33,28 @@ class DeckDetails extends Component {
     const uid = firebase.auth().currentUser.uid;
     const cardCreateDate = Date.now();
     const nextReviewDate = Date.now();
+    const interval = 1;
+    const ef = 2.5;
+    const repetition = 0;
     this.ref
       .add({
         english,
         pinyin,
         hanzi,
         deckid,
-        sm,
         uid,
         cardCreateDate,
-        nextReviewDate
+        nextReviewDate,
+        interval,
+        ef,
+        repetition
       })
       .then(docRef => {
         this.setState({
           english: "",
           pinyin: "",
           hanzi: "",
-          deckid: id,
-          sm: 0
+          deckid: id
         });
         //this.props.history.push("/");
       })
@@ -125,19 +127,19 @@ class DeckDetails extends Component {
     const { id } = this.props.location.state;
 
     return (
-      <div class="container">
-        <div class="row">
+      <div className="container">
+        <div className="row">
           {/* LEFTMOST COL */}
-          <div class="col s3">
+          <div className="col s3">
             {/* BACK BUTTON */}
-            <div class="row">
+            <div className="row">
               <Link
                 to={{
                   pathname: "/"
                 }}
               >
-                <button class="btn-floating btn-large waves-effect waves-light blue">
-                  <i class="material-icons">arrow_back</i>
+                <button className="btn-floating btn-large waves-effect waves-light blue">
+                  <i className="material-icons">arrow_back</i>
                 </button>
               </Link>
             </div>
@@ -145,66 +147,66 @@ class DeckDetails extends Component {
             {/* ADD FORM */}
             <div className="add-deck">
               <form onSubmit={this.onSubmit}>
-                <div class="form-group">
-                  <label for="english">English:</label>
+                <div className="form-group">
+                  <label>English:</label>
                   <input
                     type="text"
-                    class="form-control"
+                    className="form-control"
                     name="english"
                     value={this.state.english}
                     onChange={this.onChange}
                     placeholder="English"
                   />
                 </div>
-                <div class="form-group">
-                  <label for="pinyin">Pinyin:</label>
+                <div className="form-group">
+                  <label>Pinyin:</label>
                   <input
                     type="text"
-                    class="form-control"
+                    className="form-control"
                     name="pinyin"
                     value={this.state.pinyin}
                     onChange={this.onChange}
                     placeholder="Pinyin"
                   />
                 </div>
-                <div class="form-group">
-                  <label for="hanzi">Chinese:</label>
+                <div className="form-group">
+                  <label>Chinese:</label>
                   <input
                     type="text"
-                    class="form-control"
+                    className="form-control"
                     name="hanzi"
                     value={this.state.hanzi}
                     onChange={this.onChange}
                     placeholder="Chinese"
                   />
                 </div>
-                <button class="btn blue">Add Card</button>
+                <button className="btn blue">Add Card</button>
               </form>
             </div>
           </div>
 
           {/* RIGHTMOST COLUMN */}
-          <div class="col s7 pull-s3">
+          <div className="col s7 pull-s3">
             <div className="row">
-              <div class="text-left">
+              <div className="text-left">
                 <Link
                   to={{
                     pathname: "/review/" + id,
                     state: { id: id }
                   }}
                 >
-                  <button class="btn">Review</button>
+                  <button className="btn">Review</button>
                 </Link>
               </div>
             </div>
 
             <div className="row">
               <div className="col s7">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Cards</h3>
+                <div className="panel-heading">
+                  <h3 className="panel-title">Cards</h3>
                 </div>
-                <div class="panel-body">
-                  <table class="table table-stripe">
+                <div className="panel-body">
+                  <table className="table table-stripe">
                     <thead>
                       <tr>
                         <th>English</th>

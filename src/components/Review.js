@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import firebase, { auth } from "../config/firebase";
 import Card from "./cards/Card";
+import ProgressBar from "./gamification/ProgressBar";
 
 class Review extends Component {
   constructor() {
@@ -20,7 +21,9 @@ class Review extends Component {
       hanzi: "",
       deckid: "",
       title: "",
-      currentCard: {},
+      ef: -1,
+      interval: -1,
+      nextreviewdate: -1,
       count: 0
     };
   }
@@ -28,20 +31,33 @@ class Review extends Component {
   onCollectionUpdate = () => {
     //cards
     const cards = [];
-
     this.ref
       .where("deckid", "==", this.state.deckid)
+      // .where("nextReviewDate", "<", Date.now())
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          const { english, pinyin, hanzi, deckid } = doc.data();
+          const {
+            english,
+            pinyin,
+            hanzi,
+            deckid,
+            ef,
+            interval,
+            nextreviewdate,
+            repetition
+          } = doc.data();
           cards.push({
             key: doc.id,
             doc, // DocumentSnapshot
             english,
             pinyin,
             hanzi,
-            deckid
+            deckid,
+            ef,
+            interval,
+            nextreviewdate,
+            repetition
           });
         });
         this.setState({
@@ -65,21 +81,57 @@ class Review extends Component {
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   }
 
-  handleNext = () => {
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  handleNext = (e, currentCard, quality) => {
+    var docRef = this.ref.doc(currentCard.key);
+    var o = {};
+
+    // CALCULATE EF
+    o.ef = Math.max(
+      1.3,
+      currentCard.ef + (0.1 - (5.0 - quality)) * (0.08 + (5.0 - quality) * 0.02)
+    );
+
+    //repetition
+    if (quality < 3) {
+      o.repetition = 0;
+    } else {
+      o.repetition = currentCard.repetition + 1;
+    }
+
+    // interval
+    if (o.repetition <= 1) {
+      o.interval = 1;
+    } else if (o.repetition === 2) {
+      o.interval = 6;
+    } else {
+      o.interval = Math.max(Math.round(o.interval * o.ef, 0));
+    }
+
+    // calculate next day to review
+    const secondsInDay = 60 * 60 * 24;
+    var now = Date.now();
+    o.nextReviewDate = now + secondsInDay * o.interval;
+
+    // WRITE TO DB AND MOVE TO NEXT CARD
+    docRef.update(o);
     if (this.state.count < this.state.cards.length - 1) {
-      this.setState(({ count }) => ({
-        count: count + 1
-      }));
+      this.setState({
+        count: this.state.count + 1
+      });
     }
   };
 
-  handlePrev = () => {
-    if (this.state.count > 0) {
-      this.setState(({ count }) => ({
-        count: count - 1
-      }));
-    }
-  };
+  // handlePrev = () => {
+  //   if (this.state.count > 0) {
+  //     this.setState(({ count }) => ({
+  //       count: count - 1
+  //     }));
+  //   }
+  // };
 
   // TAKES IN CURRENT SRS SCORE, CARD ID, BUTTON PRESS, CALCS NEW SCORE
 
@@ -88,6 +140,8 @@ class Review extends Component {
     const num = this.state.count + 1;
     const denom = this.state.cards.length;
     const progress = (num / denom) * 100;
+    var currentCard = this.state.cards[this.state.count];
+    console.log(this.state.cards.length);
 
     if (typeof this.state.cards[this.state.count] !== "undefined") {
       // console.log(this.state.cards[0]["english"]);
@@ -114,33 +168,20 @@ class Review extends Component {
             <div className="col s6 valign pull-s3">
               {/* PROGRESSBAR */}
               <div className="row">
-                <div className="col s6">
-                  <div className="row">
-                    <h5 className="col s3 left-align">Review Progress</h5>
-                    <h5 className="col s3 right-align">
-                      {num} / {denom}
-                    </h5>
-                  </div>
-                  <div className="progress progressBar">
-                    <div
-                      className="determinate"
-                      style={{ width: progress + "%" }}
-                    />
-                  </div>
-                </div>
+                <ProgressBar num={num} denom={denom} progress={progress} />
               </div>
 
-              {/* PROGRESSBAR */}
+              {/* FLASHCARD */}
               <div className="row">
                 <Card
-                  eng={this.state.cards[this.state.count]["english"]}
-                  han={this.state.cards[this.state.count]["hanzi"]}
-                  pin={this.state.cards[this.state.count]["pinyin"]}
+                  eng={currentCard["english"]}
+                  han={currentCard["hanzi"]}
+                  pin={currentCard["pinyin"]}
                 />
               </div>
 
               {/* PREV NEXT BUTTONS */}
-              <div className="row">
+              {/* <div className="row">
                 <div className="col s6 text-center">
                   <button
                     className="waves-effect waves-light btn"
@@ -155,15 +196,55 @@ class Review extends Component {
                     Next
                   </button>
                 </div>
-              </div>
+              </div> */}
 
               {/* SRS BUTTONS */}
               <div className="row">
                 <div className="col s6 text-center">
-                  <button className="btn">Easy</button>
-                  <button className="btn">Good</button>
-                  <button className="btn">Okay</button>
-                  <button className="btn">Hard</button>
+                  <button
+                    className="btn"
+                    onClick={e => {
+                      this.handleNext(e, currentCard, 4);
+                    }}
+                  >
+                    Easy
+                  </button>
+                  <button
+                    className="btn"
+                    onClick={e => {
+                      this.handleNext(e, currentCard, 3);
+                    }}
+                  >
+                    {" "}
+                    Good
+                  </button>
+                  <button
+                    className="btn"
+                    onClick={e => {
+                      this.handleNext(e, currentCard, 2);
+                    }}
+                  >
+                    {" "}
+                    Okay
+                  </button>
+                  <button
+                    className="btn"
+                    onClick={e => {
+                      this.handleNext(e, currentCard, 1);
+                    }}
+                  >
+                    {" "}
+                    Hard
+                  </button>
+                  <button
+                    className="btn"
+                    onClick={e => {
+                      this.handleNext(e, currentCard, 0);
+                    }}
+                  >
+                    {" "}
+                    Skip
+                  </button>
                 </div>
               </div>
             </div>
@@ -171,7 +252,22 @@ class Review extends Component {
         </div>
       );
     } else {
-      return <div />;
+      return (
+        <div>
+          <div className="">
+            <Link
+              to={{
+                pathname: "/deck/" + id,
+                state: { id: id }
+              }}
+            >
+              <button className="btn-floating btn-large waves-effect waves-light blue">
+                <i className="material-icons">arrow_back</i>
+              </button>
+            </Link>
+          </div>
+        </div>
+      );
     }
   }
 }
