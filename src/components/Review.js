@@ -12,6 +12,7 @@ class Review extends Component {
     this.ref = firebase.firestore().collection("flashcards");
 
     const cards = [];
+    const alreadyChecked = false;
 
     this.state = {
       cards: cards,
@@ -24,46 +25,51 @@ class Review extends Component {
       ef: -1,
       interval: -1,
       nextreviewdate: -1,
-      count: 0
+      count: 0,
+      alreadyChecked
     };
   }
 
   onCollectionUpdate = () => {
     //cards
     const cards = [];
-    this.ref
-      .where("deckid", "==", this.state.deckid)
-      // .where("nextReviewDate", "<", Date.now())
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          const {
-            english,
-            pinyin,
-            hanzi,
-            deckid,
-            ef,
-            interval,
-            nextreviewdate,
-            repetition
-          } = doc.data();
-          cards.push({
-            key: doc.id,
-            doc, // DocumentSnapshot
-            english,
-            pinyin,
-            hanzi,
-            deckid,
-            ef,
-            interval,
-            nextreviewdate,
-            repetition
+    if (!this.state.alreadyChecked) {
+      this.ref
+        .where("deckid", "==", this.state.deckid)
+        // Can change this line to nextReviewDate but ... not working
+        .where("nextReviewDate", "<=", Date.now())
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            const {
+              english,
+              pinyin,
+              hanzi,
+              deckid,
+              ef,
+              interval,
+              nextreviewdate,
+              repetition
+            } = doc.data();
+            cards.push({
+              key: doc.id,
+              doc, // DocumentSnapshot
+              english,
+              pinyin,
+              hanzi,
+              deckid,
+              ef,
+              interval,
+              nextreviewdate,
+              repetition
+            });
+          });
+          this.setState({
+            cards,
+            alreadyChecked: true
           });
         });
-        this.setState({
-          cards
-        });
-      });
+    }
   };
 
   componentDidMount() {
@@ -85,6 +91,7 @@ class Review extends Component {
     this.mounted = false;
   }
 
+  // Calculates all the SRS stuff
   handleNext = (e, currentCard, quality) => {
     var docRef = this.ref.doc(currentCard.key);
     var o = {};
@@ -122,6 +129,11 @@ class Review extends Component {
       this.setState({
         count: this.state.count + 1
       });
+    }
+    console.log(this.props.location.state);
+    // FIX THIS WHAT TO DO WHEN DONE
+    if (this.state.count === this.state.cards.length - 1) {
+      this.props.history.push("/");
     }
   };
 

@@ -108,6 +108,7 @@ class DeckDetails extends Component {
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   }
 
+  // Delete flashcard
   delete(id) {
     // console.log(id);
     firebase

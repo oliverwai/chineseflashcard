@@ -70,6 +70,7 @@ class Dashboard extends Component {
     this.setState(state);
   };
 
+  // Only pulls deck associated with user based on uid
   onCollectionUpdate = querySnapshot => {
     const decks = [];
     this.ref
@@ -125,6 +126,7 @@ class Dashboard extends Component {
     */
   }
 
+  // Delete Deck
   delete(id) {
     firebase
       .firestore()
@@ -134,6 +136,7 @@ class Dashboard extends Component {
       .then(() => {
         console.log("Document successfully deleted!");
 
+        // This part deletes all the associate flashcards
         firebase
           .firestore()
           .collection("flashcards")

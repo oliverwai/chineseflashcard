@@ -24,6 +24,8 @@ class NavBar extends Component {
     window.location.reload();
   }
 
+  // Now checks if a user is new or not
+  // if new adds a ton of data to DB
   async login() {
     await auth.signInWithPopup(provider).then(result => {
       const user = result.user;
