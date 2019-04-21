@@ -106,99 +106,137 @@ class DeckDetails extends Component {
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   }
 
+  delete(id) {
+    // console.log(id);
+    firebase
+      .firestore()
+      .collection("flashcards")
+      .doc(id)
+      .delete()
+      .then(() => {
+        console.log("Document successfully deleted!");
+      })
+      .catch(error => {
+        console.error("Error removing document: ", error);
+      });
+  }
+
   render() {
     const { id } = this.props.location.state;
 
     return (
-      <div>
-        <div class="container">
-          <div class="back-button">
-            <Link
-              to={{
-                pathname: "/"
-              }}
-            >
-              <button class="btn-floating btn-large waves-effect waves-light blue">
-                <i class="material-icons">arrow_back</i>
-              </button>
-            </Link>
-          </div>
-          <div class="review-bar">
-            <Link
-              to={{
-                pathname: "/review/" + id,
-                state: { id: id }
-              }}
-            >
-              <button class="btn">Review</button>
-            </Link>
-          </div>
-        </div>
+      <div class="container">
+        <div class="row">
+          {/* LEFTMOST COL */}
+          <div class="col s3">
+            {/* BACK BUTTON */}
+            <div class="row">
+              <Link
+                to={{
+                  pathname: "/"
+                }}
+              >
+                <button class="btn-floating btn-large waves-effect waves-light blue">
+                  <i class="material-icons">arrow_back</i>
+                </button>
+              </Link>
+            </div>
 
-        <div class="container">
-          <section className="add-deck">
-            <form onSubmit={this.onSubmit}>
-              <div class="form-group">
-                <label for="english">English:</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="english"
-                  value={this.state.english}
-                  onChange={this.onChange}
-                  placeholder="English"
-                />
-              </div>
-              <div class="form-group">
-                <label for="pinyin">Pinyin:</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="pinyin"
-                  value={this.state.pinyin}
-                  onChange={this.onChange}
-                  placeholder="Pinyin"
-                />
-              </div>
-              <div class="form-group">
-                <label for="hanzi">Chinese:</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="hanzi"
-                  value={this.state.hanzi}
-                  onChange={this.onChange}
-                  placeholder="Chinese"
-                />
-              </div>
-              <button class="btn blue">Add Card</button>
-            </form>
-          </section>
-          <section className="display-deck">
-            <div class="panel-heading">
-              <h3 class="panel-title">Cards</h3>
+            {/* ADD FORM */}
+            <div className="add-deck">
+              <form onSubmit={this.onSubmit}>
+                <div class="form-group">
+                  <label for="english">English:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="english"
+                    value={this.state.english}
+                    onChange={this.onChange}
+                    placeholder="English"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="pinyin">Pinyin:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="pinyin"
+                    value={this.state.pinyin}
+                    onChange={this.onChange}
+                    placeholder="Pinyin"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="hanzi">Chinese:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="hanzi"
+                    value={this.state.hanzi}
+                    onChange={this.onChange}
+                    placeholder="Chinese"
+                  />
+                </div>
+                <button class="btn blue">Add Card</button>
+              </form>
             </div>
-            <div class="panel-body">
-              <table class="table table-stripe">
-                <thead>
-                  <tr>
-                    <th>English</th>
-                    <th>Pinyin</th>
-                    <th>Chinese</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.cards.map(card => (
-                    <tr key={card.id}>
-                      <td>{card.english}</td>
-                      <td>{card.pinyin}</td>
-                      <td>{card.hanzi}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          </div>
+
+          {/* RIGHTMOST COLUMN */}
+          <div class="col s7 pull-s3">
+            <div className="row">
+              <div class="text-left">
+                <Link
+                  to={{
+                    pathname: "/review/" + id,
+                    state: { id: id }
+                  }}
+                >
+                  <button class="btn">Review</button>
+                </Link>
+              </div>
             </div>
-          </section>
+
+            <div className="row">
+              <div className="col s7">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Cards</h3>
+                </div>
+                <div class="panel-body">
+                  <table class="table table-stripe">
+                    <thead>
+                      <tr>
+                        <th>English</th>
+                        <th>Pinyin</th>
+                        <th>Chinese</th>
+                        <th> </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.cards.map(card => (
+                        <tr key={card.id}>
+                          <td>{card.english}</td>
+                          <td>{card.pinyin}</td>
+                          <td>{card.hanzi}</td>
+                          <td>
+                            <div className="left">
+                              <button
+                                onClick={this.delete.bind(this, card.key)}
+                                className="btn btn-danger"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

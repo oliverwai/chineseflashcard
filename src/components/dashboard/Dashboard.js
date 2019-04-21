@@ -133,6 +133,22 @@ class Dashboard extends Component {
       .delete()
       .then(() => {
         console.log("Document successfully deleted!");
+
+        firebase
+          .firestore()
+          .collection("flashcards")
+          .where("deckid", "==", id)
+          .get()
+          .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+              firebase
+                .firestore()
+                .collection("flashcards")
+                .doc(doc.id)
+                .delete();
+            });
+          });
+
         this.props.history.push("/");
       })
       .catch(error => {
@@ -151,76 +167,94 @@ class Dashboard extends Component {
       <div>
         {this.state.user ? (
           <div className="container">
-            <section className="add-deck">
-              <form onSubmit={this.onSubmit}>
-                <div className="form-group">
-                  <label for="title">Title:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="title"
-                    value={this.state.title}
-                    onChange={this.onChange}
-                    placeholder="Title"
-                  />
+            <div className="row">
+              {/* LEFTMOST COLUMN */}
+              <div className="col s3">
+                {/* ADD DECK FORM */}
+                <div row>
+                  <div className="add-deck">
+                    <form onSubmit={this.onSubmit}>
+                      <div className="form-group">
+                        <label for="title">Title:</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="title"
+                          value={this.state.title}
+                          onChange={this.onChange}
+                          placeholder="Title"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label for="description">Description:</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="description"
+                          value={this.state.description}
+                          onChange={this.onChange}
+                          placeholder="Description"
+                        />
+                      </div>
+                      <button className="btn blue">Add Deck</button>
+                    </form>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label for="description">Description:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="description"
-                    value={this.state.description}
-                    onChange={this.onChange}
-                    placeholder="Description"
-                  />
+              </div>
+
+              {/* RIGHTMOST COLUMN */}
+              <div className="col s7 pull-s3">
+                {/* DECKLIST */}
+                <div className="row">
+                  <div className="col s7">
+                    <div className="panel-heading">
+                      <h3 className="panel-title">DECK LIST</h3>
+                    </div>
+                    <div className="panel-body">
+                      <table className="highlight">
+                        <thead>
+                          <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th> </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {this.state.decks.map(deck => (
+                            <tr>
+                              <td>
+                                <Link
+                                  to={{
+                                    pathname: "/deck/" + deck.key,
+                                    state: {
+                                      id: deck.key,
+                                      user: this.state.user.id
+                                    }
+                                  }}
+                                >
+                                  {deck.title}
+                                </Link>
+                              </td>
+                              <td>{deck.description}</td>
+                              <td>
+                                <div className="left">
+                                  <button
+                                    onClick={this.delete.bind(this, deck.key)}
+                                    className="btn btn-danger"
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
-                <button className="btn blue">Add Deck</button>
-              </form>
-            </section>
-            <section className="display-deck">
-              <div className="panel-heading">
-                <h3 className="panel-title">DECK LIST</h3>
               </div>
-              <div className="panel-body">
-                <table className="highlight">
-                  <thead>
-                    <tr>
-                      <th>Title</th>
-                      <th>Description</th>
-                      <th> </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.decks.map(deck => (
-                      <tr>
-                        <td>
-                          <Link
-                            to={{
-                              pathname: "/deck/" + deck.key,
-                              state: { id: deck.key, user: this.state.user.id }
-                            }}
-                          >
-                            {deck.title}
-                          </Link>
-                        </td>
-                        <td>{deck.description}</td>
-                        <td>
-                          <div className="left">
-                            <button
-                              onClick={this.delete.bind(this, deck.key)}
-                              className="btn btn-danger"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
+            </div>
           </div>
         ) : (
           <div className="wrapper">

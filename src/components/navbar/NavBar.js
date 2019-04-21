@@ -27,32 +27,34 @@ class NavBar extends Component {
   async login() {
     await auth.signInWithPopup(provider).then(result => {
       const user = result.user;
-      var newuser =result.additionalUserInfo.isNewUser;
+      var newuser = result.additionalUserInfo.isNewUser;
       this.setState({
         user,
         newuser
       });
 
-      var docRef = firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid);
+      var docRef = firebase
+        .firestore()
+        .collection("users")
+        .doc(firebase.auth().currentUser.uid);
       var o = {};
-        if (newuser) {
-            //user is already there, write only last login
-            o.displayName = firebase.auth().currentUser.displayName;
-            o.email = user.email;
-            o.accountCreatedDate = Date.now();
-            o.lastLoginDate = Date.now();
-            o.points = 0;
-            docRef.set(o);
-            console.log("new user")
-        }
-        else {
-            //new user
-            // Send it
-            o.lastLoginDate = Date.now();
-            docRef.set(o);
-            console.log("old user")
+      if (newuser) {
+        //user is already there, write only last login
+        o.displayName = firebase.auth().currentUser.displayName;
+        o.email = user.email;
+        o.accountCreatedDate = Date.now();
+        o.lastLoginDate = Date.now();
+        o.points = 0;
+        docRef.update(o);
+        console.log("new user");
+      } else {
+        //new user
+        // Send it
+        o.lastLoginDate = Date.now();
 
-        }
+        docRef.update(o);
+        console.log("old user");
+      }
     });
   }
 
@@ -68,7 +70,7 @@ class NavBar extends Component {
     return (
       <nav>
         <div className="nav-wrapper">
-          <Link to="/" className="link brand-logo">
+          <Link to="/" className="link brand-logo left">
             Chinese Flashcards
           </Link>
           <ul id="nav-mobile" className="right hide-on-med-and-down">

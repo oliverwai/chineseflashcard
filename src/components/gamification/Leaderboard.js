@@ -15,26 +15,27 @@ class DeckDetails extends Component {
     };
   }
 
-
   onCollectionUpdate = querySnapshot => {
     const leader = [];
-    
-      querySnapshot.forEach(doc => {
-        const { displayName, points } = doc.data();
-        leader.push({
-          key: doc.id,
-          doc, // DocumentSnapshot
-          displayName,
-          points
-        });
+
+    querySnapshot.forEach(doc => {
+      const { displayName, points } = doc.data();
+      leader.unshift({
+        key: doc.id,
+        doc, // DocumentSnapshot
+        displayName,
+        points
       });
-      this.setState({
-        leader
-      });
+    });
+    this.setState({
+      leader
+    });
   };
 
   componentDidMount() {
-    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+    this.unsubscribe = this.ref
+      .orderBy("points")
+      .onSnapshot(this.onCollectionUpdate);
   }
 
   render() {
