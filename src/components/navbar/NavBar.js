@@ -41,21 +41,24 @@ class NavBar extends Component {
         .doc(firebase.auth().currentUser.uid);
       var o = {};
       if (newuser) {
-        //user is already there, write only last login
+        //new user, create a ton of fields
         o.displayName = firebase.auth().currentUser.displayName;
         o.email = user.email;
         o.accountCreatedDate = Date.now();
         o.lastLoginDate = Date.now();
         o.points = 0;
+        o.dayStreak = 1;
         docRef.update(o);
         console.log("new user");
       } else {
-        //new user
-        // Send it
-        o.lastLoginDate = Date.now();
+        //old user
+        const oneday = 24 * 60 * 60;
+        const twoday = 2 * oneday;
 
+        //update streak & points for login
+
+        o.lastLoginDate = Date.now();
         docRef.update(o);
-        console.log("old user");
       }
     });
   }
@@ -71,14 +74,19 @@ class NavBar extends Component {
   render() {
     return (
       <nav>
-        <div className="nav-wrapper">
+        <div className="nav-wrapper container">
           <Link to="/" className="link brand-logo left">
-            Chinese Flashcards
+            漢字 Hanzi
           </Link>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
             <li>
               <Link to="/leaderboard" className="link">
                 Leaderboard
+              </Link>
+            </li>
+            <li>
+              <Link to="/achievements" className="link">
+                Achievements
               </Link>
             </li>
             <li>

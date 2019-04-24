@@ -42,29 +42,31 @@ class DeckDetails extends Component {
   render() {
     return (
       <div class="container">
-        <section className="display-deck">
-          <div class="panel-heading">
-            <h3 class="panel-title">LEADERBOARD</h3>
-          </div>
-          <div class="panel-body">
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Score</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.leader.map(leader => (
+        <div className="row center-align">
+          <div className="display-deck">
+            <div class="panel-heading">
+              <h3 class="panel-title">LEADERBOARD</h3>
+            </div>
+            <div class="panel-body">
+              <Table striped bordered hover>
+                <thead>
                   <tr>
-                    <td>{leader.displayName}</td>
-                    <td>{leader.points}</td>
+                    <th>Name</th>
+                    <th>Score</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
+                </thead>
+                <tbody>
+                  {this.state.leader.map(leader => (
+                    <tr>
+                      <td>{leader.displayName}</td>
+                      <td>{leader.points}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
           </div>
-        </section>
+        </div>
       </div>
     );
   }
