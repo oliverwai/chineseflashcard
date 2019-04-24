@@ -119,7 +119,7 @@ class Review extends Component {
     }
 
     // calculate next day to review
-    const secondsInDay = 60 * 60 * 24;
+    const secondsInDay = 60 * 60 * 24 * 1000;
     var now = Date.now();
     o.nextReviewDate = now + secondsInDay * o.interval;
 
@@ -152,6 +152,7 @@ class Review extends Component {
     const num = this.state.count + 1;
     const denom = this.state.cards.length;
     const progress = (num / denom) * 100;
+    const title = "Review Progress";
     var currentCard = this.state.cards[this.state.count];
     console.log(this.state.cards.length);
 
@@ -180,7 +181,12 @@ class Review extends Component {
             <div className="col s6 valign pull-s3">
               {/* PROGRESSBAR */}
               <div className="row">
-                <ProgressBar num={num} denom={denom} progress={progress} />
+                <ProgressBar
+                  num={num}
+                  denom={denom}
+                  progress={progress}
+                  title={title}
+                />
               </div>
 
               {/* FLASHCARD */}
