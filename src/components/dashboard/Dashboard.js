@@ -15,7 +15,8 @@ class Dashboard extends Component {
       user: null,
       title: "",
       description: "",
-      uid: null
+      uid: null,
+      reviewCount: -1
     };
     //this.handleChange = this.handleChange.bind(this);
     //this.handleSubmit = this.handleSubmit.bind(this);
@@ -208,54 +209,50 @@ class Dashboard extends Component {
               {/* RIGHTMOST COLUMN */}
               <div className="col s7 pull-s3">
                 {/* DECKLIST */}
-                <div className="row">
-                  <div className="col s7">
-                    <div className="panel-heading">
-                      <h3 className="panel-title">DECK LIST</h3>
-                    </div>
-                    <div className="panel-body">
-                      <table className="highlight">
-                        <thead>
-                          <tr>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th> </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {this.state.decks.map(deck => (
-                            <tr>
-                              <td>
-                                <Link
-                                  to={{
-                                    pathname: "/deck/" + deck.key,
-                                    state: {
-                                      id: deck.key,
-                                      user: this.state.user.id,
-                                      title: deck.title
-                                    }
-                                  }}
-                                >
-                                  {deck.title}
-                                </Link>
-                              </td>
-                              <td>{deck.description}</td>
-                              <td>
-                                <div className="left">
-                                  <button
-                                    onClick={this.delete.bind(this, deck.key)}
-                                    className="btn btn-danger"
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
+                <div className="panel-heading clear-10">
+                  <h3 className="panel-title">DECK LIST</h3>
+                </div>
+                <div className="panel-body">
+                  <table className="highlight">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th> </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.decks.map(deck => (
+                        <tr>
+                          <td>
+                            <Link
+                              to={{
+                                pathname: "/deck/" + deck.key,
+                                state: {
+                                  id: deck.key,
+                                  user: this.state.user.id,
+                                  title: deck.title
+                                }
+                              }}
+                            >
+                              {deck.title}
+                            </Link>
+                          </td>
+                          <td>{deck.description}</td>
+                          <td>
+                            <div className="left">
+                              <button
+                                onClick={this.delete.bind(this, deck.key)}
+                                className="btn btn-danger"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>

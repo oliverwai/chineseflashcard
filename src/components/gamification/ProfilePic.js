@@ -21,7 +21,7 @@ const ProfilePic = props => {
     profile = owl5;
   }
 
-  return <img className="centered" src={profile} alt="Logo" />;
+  return <img className="centered" src={profile} alt="Profile" />;
 };
 
 export default ProfilePic;

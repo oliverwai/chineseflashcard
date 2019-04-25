@@ -10,6 +10,7 @@ class Review extends Component {
     this.unsubscribe = null;
 
     this.ref = firebase.firestore().collection("flashcards");
+    this.userRef = firebase.firestore().collection("users");
 
     const cards = [];
     const alreadyChecked = false;
@@ -131,13 +132,20 @@ class Review extends Component {
         count: this.state.count + 1
       });
     }
-    console.log(this.props.location.state);
-    // FIX THIS WHAT TO DO WHEN DONE
     if (this.state.count === this.state.cards.length - 1) {
       this.setState({
         finished: true
       });
     }
+    var updatepoints = quality * 10;
+    // POST POINTS TO DB
+    var docRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid);
+    docRef.update({
+      points: firebase.firestore.FieldValue.increment(quality * 10)
+    });
   };
 
   // handlePrev = () => {
@@ -282,9 +290,45 @@ class Review extends Component {
     // SHOW CONGRATS IMAGE
     // BACK BUTTON TO DECK
     else if (this.state.finished) {
-      return <div> All done </div>;
+      return (
+        <div className="container">
+          <div className="">
+            <h3 className="centered clear-10">All Done!</h3>
+            <div className="centered clear-10">
+              <Link
+                to={{
+                  pathname: "/deck/" + id,
+                  state: { id: id }
+                }}
+              >
+                <button className="btn-floating btn-large waves-effect waves-light blue">
+                  <i className="material-icons">arrow_back</i>
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      );
     } else {
-      return <div>Nothing to Review!</div>;
+      return (
+        <div className="container">
+          <div className="">
+            <h3 className="centered clear-10">Nothing to Review!</h3>
+            <div className="centered clear-10">
+              <Link
+                to={{
+                  pathname: "/deck/" + id,
+                  state: { id: id }
+                }}
+              >
+                <button className="btn-floating btn-large waves-effect waves-light blue">
+                  <i className="material-icons">arrow_back</i>
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      );
     }
   }
 }

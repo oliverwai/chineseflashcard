@@ -19,10 +19,11 @@ class DeckDetails extends Component {
   // unshift moves the item the front, so highest point =top
   onCollectionUpdate = querySnapshot => {
     const leader = [];
-
     querySnapshot.forEach(doc => {
       const { displayName, points } = doc.data();
+      const level = Math.floor(points / 1000);
       leader.unshift({
+        level,
         key: doc.id,
         doc, // DocumentSnapshot
         displayName,
@@ -54,6 +55,7 @@ class DeckDetails extends Component {
               <Table striped bordered hover>
                 <thead>
                   <tr>
+                    <th>Level</th>
                     <th>Name</th>
                     <th>Score</th>
                   </tr>
@@ -61,8 +63,9 @@ class DeckDetails extends Component {
                 <tbody>
                   {this.state.leader.map(leader => (
                     <tr>
-                      <td>{leader.displayName}</td>
-                      <td>{leader.points}</td>
+                      <td className="tdcenter">{leader.level}</td>
+                      <td className="tdcenter">{leader.displayName}</td>
+                      <td className="tdcenter">{leader.points}</td>
                     </tr>
                   ))}
                 </tbody>

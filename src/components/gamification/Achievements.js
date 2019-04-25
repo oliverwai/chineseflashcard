@@ -143,12 +143,12 @@ class Achievements extends Component {
   }
 }
 
-function calcLevel(props) {
-  return props.value;
-}
+// function calcLevel(props) {
+//   return props.value;
+// }
 
-function calcNextLevel(props) {
-  return props.value;
-}
+// function calcNextLevel(props) {
+//   return props.value;
+// }
 
 export default Achievements;

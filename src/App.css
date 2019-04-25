@@ -155,4 +155,10 @@ form button {
 
 .centered {
   margin: 0 auto;
+  text-align: center;
+}
+
+.tdcenter {
+  text-align: center;
+  vertical-align: middle;
 }

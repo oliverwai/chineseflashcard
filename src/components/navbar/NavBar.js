@@ -140,4 +140,8 @@ class NavBar extends Component {
   }
 }
 
+function calcLevel(props) {
+  return props.value;
+}
+
 export default NavBar;
