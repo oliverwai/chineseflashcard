@@ -105,7 +105,7 @@ class DeckDetails extends Component {
     } else {
       var days = Math.floor(secondDiff / (24 * 60 * 60));
       var hours = Math.floor((secondDiff % (24 * 60 * 60)) / 3600);
-      var minutes = Math.floor((secondDiff % (24 * 60)) / 60);
+      var minutes = Math.floor((secondDiff % 3600) / 60);
       return (
         <p>
           {days}D:{hours}H:{minutes}M

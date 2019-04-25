@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import firebase from "../../config/firebase.js";
 import Table from "react-bootstrap/Table";
+import crown from "../img/crown.png";
 
 // replace this w/ flashcard info
 class DeckDetails extends Component {
@@ -42,12 +43,14 @@ class DeckDetails extends Component {
   render() {
     return (
       <div class="container">
-        <div className="row center">
-          <div className="display-deck">
+        <div className="row">
+          <div className="display-deck centered">
             <div class="panel-heading">
+              <img src={crown} alt="icon" />
+
               <h3 class="panel-title">LEADERBOARD</h3>
             </div>
-            <div class="panel-body">
+            <div class="panel-body centered">
               <Table striped bordered hover>
                 <thead>
                   <tr>
