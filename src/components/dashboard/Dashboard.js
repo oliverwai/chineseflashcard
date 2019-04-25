@@ -231,7 +231,8 @@ class Dashboard extends Component {
                                     pathname: "/deck/" + deck.key,
                                     state: {
                                       id: deck.key,
-                                      user: this.state.user.id
+                                      user: this.state.user.id,
+                                      title: deck.title
                                     }
                                   }}
                                 >

@@ -29,7 +29,7 @@ class DeckDetails extends Component {
     e.preventDefault();
 
     const id = this.props.location.state.id;
-    const { english, pinyin, hanzi, deckid, sm } = this.state;
+    const { english, pinyin, hanzi, deckid } = this.state;
     const uid = firebase.auth().currentUser.uid;
     const cardCreateDate = Date.now();
     const nextReviewDate = Date.now();
@@ -79,14 +79,15 @@ class DeckDetails extends Component {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          const { english, pinyin, hanzi, deckid } = doc.data();
+          const { english, pinyin, hanzi, deckid, nextReviewDate } = doc.data();
           cards.push({
             key: doc.id,
             doc, // DocumentSnapshot
             english,
             pinyin,
             hanzi,
-            deckid
+            deckid,
+            nextReviewDate
           });
         });
         this.setState({
@@ -95,15 +96,38 @@ class DeckDetails extends Component {
       });
   };
 
+  // Renders what the Review Tab of the Table says
+  renderYesNo(props) {
+    var currentTime = Date.now();
+    var secondDiff = (props.nextReviewDate - currentTime) / 1000;
+    if (props.nextReviewDate < currentTime) {
+      return "Now";
+    } else {
+      var days = Math.floor(secondDiff / (24 * 60 * 60));
+      var hours = Math.floor((secondDiff % (24 * 60 * 60)) / 3600);
+      var minutes = Math.floor((secondDiff % (24 * 60)) / 60);
+      return (
+        <p>
+          {days}D:{hours}H:{minutes}M
+        </p>
+      );
+    }
+  }
+
   componentDidMount() {
     const { id } = this.props.location.state;
     if (id) {
-      this.setState({ deckid: id });
-      this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+      firebase
+        .firestore()
+        .collection("decks")
+        .doc(id)
+        .get()
+        .then(doc => {
+          const { title } = doc.data();
+          this.setState({ deckid: id, title });
+          this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+        });
     }
-
-    const cards = [];
-    //const id = this.props.location.state;
 
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   }
@@ -188,6 +212,12 @@ class DeckDetails extends Component {
 
           {/* RIGHTMOST COLUMN */}
           <div className="col s7 pull-s3">
+            {/* Title */}
+            <div className="row">
+              <div className="panel-heading">
+                <h3 className="panel-title">{this.state.title}</h3>
+              </div>
+            </div>
             <div className="row">
               <div className="text-left">
                 <Link
@@ -203,9 +233,6 @@ class DeckDetails extends Component {
 
             <div className="row">
               <div className="col s7">
-                <div className="panel-heading">
-                  <h3 className="panel-title">Cards</h3>
-                </div>
                 <div className="panel-body">
                   <table className="table table-stripe">
                     <thead>
@@ -213,6 +240,7 @@ class DeckDetails extends Component {
                         <th>English</th>
                         <th>Pinyin</th>
                         <th>Chinese</th>
+                        <th>Review</th>
                         <th> </th>
                       </tr>
                     </thead>
@@ -222,6 +250,11 @@ class DeckDetails extends Component {
                           <td>{card.english}</td>
                           <td>{card.pinyin}</td>
                           <td>{card.hanzi}</td>
+                          <td>
+                            {this.renderYesNo({
+                              nextReviewDate: card.nextReviewDate
+                            })}
+                          </td>
                           <td>
                             <div className="left">
                               <button

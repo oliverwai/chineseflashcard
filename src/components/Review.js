@@ -13,6 +13,7 @@ class Review extends Component {
 
     const cards = [];
     const alreadyChecked = false;
+    const finished = false;
 
     this.state = {
       cards: cards,
@@ -133,7 +134,9 @@ class Review extends Component {
     console.log(this.props.location.state);
     // FIX THIS WHAT TO DO WHEN DONE
     if (this.state.count === this.state.cards.length - 1) {
-      this.props.history.push("/");
+      this.setState({
+        finished: true
+      });
     }
   };
 
@@ -156,7 +159,10 @@ class Review extends Component {
     var currentCard = this.state.cards[this.state.count];
     console.log(this.state.cards.length);
 
-    if (typeof this.state.cards[this.state.count] !== "undefined") {
+    if (
+      typeof this.state.cards[this.state.count] !== "undefined" &&
+      !this.state.finished
+    ) {
       // console.log(this.state.cards[0]["english"]);
       return (
         <div className="container" style={{}}>
@@ -216,7 +222,7 @@ class Review extends Component {
                 </div>
               </div> */}
 
-              {/* SRS BUTTONS */}
+              {/* SRS BUTTONS WITH SELECTED ANSWER SOL PASSED ON*/}
               <div className="row">
                 <div className="col s6 text-center">
                   <button
@@ -269,23 +275,16 @@ class Review extends Component {
           </div>
         </div>
       );
+    }
+
+    // WHEN DONE WITH ALL THE FLASHCARDS UNIQUE SCENARIO
+    // INCREMENT USER # REVIEWS DONE BY 1 in users collection
+    // SHOW CONGRATS IMAGE
+    // BACK BUTTON TO DECK
+    else if (this.state.finished) {
+      return <div> All done </div>;
     } else {
-      return (
-        <div>
-          <div className="">
-            <Link
-              to={{
-                pathname: "/deck/" + id,
-                state: { id: id }
-              }}
-            >
-              <button className="btn-floating btn-large waves-effect waves-light blue">
-                <i className="material-icons">arrow_back</i>
-              </button>
-            </Link>
-          </div>
-        </div>
-      );
+      return <div>Nothing to Review!</div>;
     }
   }
 }

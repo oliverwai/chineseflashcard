@@ -42,7 +42,7 @@ class DeckDetails extends Component {
   render() {
     return (
       <div class="container">
-        <div className="row center-align">
+        <div className="row center">
           <div className="display-deck">
             <div class="panel-heading">
               <h3 class="panel-title">LEADERBOARD</h3>
