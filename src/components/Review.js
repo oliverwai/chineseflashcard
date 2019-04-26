@@ -28,7 +28,8 @@ class Review extends Component {
       interval: -1,
       nextreviewdate: -1,
       count: 0,
-      alreadyChecked
+      alreadyChecked,
+      newPoints: 0
     };
   }
 
@@ -144,7 +145,12 @@ class Review extends Component {
       .collection("users")
       .doc(firebase.auth().currentUser.uid);
     docRef.update({
-      points: firebase.firestore.FieldValue.increment(quality * 10)
+      points: firebase.firestore.FieldValue.increment(updatepoints)
+    });
+
+    var newPoints = this.state.newPoints + updatepoints;
+    this.setState({
+      newPoints
     });
   };
 
@@ -294,6 +300,9 @@ class Review extends Component {
         <div className="container">
           <div className="">
             <h3 className="centered clear-10">All Done!</h3>
+            <h3 className="centered clear-10">
+              You Gained {this.state.newPoints} New Points
+            </h3>
             <div className="centered clear-10">
               <Link
                 to={{

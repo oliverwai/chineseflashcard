@@ -48,7 +48,7 @@ class Achievements extends Component {
     return (
       <div>
         {this.state.user ? (
-          <div className="container">
+          <div className="container" style={{ width: "50%" }}>
             <div className="row" />
 
             {/* MAIN COLUMN */}
