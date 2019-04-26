@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import firebase, { auth, provider } from "../../config/firebase.js";
+import { Link } from "react-router-dom";
 import fire from "../img/firestreak.png"; // Tell Webpack this JS file uses this image
 import ProgressBar from "./ProgressBar";
 import ProfilePic from "./ProfilePic";
@@ -15,7 +16,9 @@ class Achievements extends Component {
       uid: null,
       points: 0,
       dayStreak: 0,
-      displayName: null
+      displayName: null,
+      doneQuizCount: 0,
+      deckSize: 0
     };
   }
 
@@ -23,15 +26,24 @@ class Achievements extends Component {
     auth.onAuthStateChanged(user => {
       if (user) {
         const uid = firebase.auth().currentUser.uid;
+
         var docRef = this.ref.doc(uid);
         docRef.get().then(doc => {
-          const { dayStreak, displayName, points } = doc.data();
+          const {
+            deckSize,
+            doneQuizCount,
+            dayStreak,
+            displayName,
+            points
+          } = doc.data();
           this.setState({
             user,
             uid,
             displayName,
             points,
-            dayStreak
+            dayStreak,
+            doneQuizCount,
+            deckSize
           });
         });
       }
@@ -40,16 +52,22 @@ class Achievements extends Component {
 
   render() {
     const level = Math.floor(this.state.points / 1000);
-    const pointsdenom = (level + 1) * 1000;
-    const pointsprogress = (this.state.points % 1000) / 10;
-    const streakdenom = (Math.floor(this.state.dayStreak / 5) + 1) * 5;
-    const streakprogress = (this.state.dayStreak % 5) * 20;
 
     return (
       <div>
         {this.state.user ? (
           <div className="container" style={{ width: "50%" }}>
-            <div className="row" />
+            <div className="row">
+              <Link
+                to={{
+                  pathname: "/"
+                }}
+              >
+                <button className="btn-floating btn-large waves-effect waves-light blue">
+                  <i className="material-icons">arrow_back</i>
+                </button>
+              </Link>
+            </div>
 
             {/* MAIN COLUMN */}
             <div className="col s6">
@@ -65,71 +83,40 @@ class Achievements extends Component {
               {/* Progress Bar for Points */}
               <div className="row">
                 <img src={fire} alt="badge" />
-                <ProgressBar
-                  title={"Points"}
-                  num={this.state.points}
-                  denom={pointsdenom}
-                  progress={pointsprogress}
-                />
+                {generateProgress(this.state.points, 1000, "Points")}
               </div>
               {/* Progress Bar for Day Streaks */}
               <div className="row">
                 <img src={fire} alt="badge" />
-
-                <ProgressBar
-                  title={"Login Streak"}
-                  num={this.state.dayStreak}
-                  denom={streakdenom}
-                  progress={streakprogress}
-                />
+                {generateProgress(this.state.dayStreak, 5, "Login Streak")}
               </div>
 
               {/* Progress Bar for Quizes TBD*/}
               <div className="row">
                 <img src={fire} alt="badge" />
+                {generateProgress(
+                  this.state.doneQuizCount,
+                  5,
+                  "Completed Quizzes"
+                )}
+              </div>
 
-                <ProgressBar
-                  title={"Completed Quizzes"}
-                  num={1}
-                  denom={2}
-                  progress={50}
-                />
+              {/* Progress Bar for Perfect Quizes */}
+              <div className="row">
+                <img src={fire} alt="badge" />
+                {generateProgress(this.state.dayStreak, 5, "Perfect Quizzes")}
+              </div>
+
+              {/* Progress Bar for # Decks*/}
+              <div className="row">
+                <img src={fire} alt="badge" />
+                {generateProgress(this.state.deckSize, 3, "Number of Decks")}
               </div>
 
               {/* Progress Bar for Quizes TBD*/}
               <div className="row">
                 <img src={fire} alt="badge" />
-
-                <ProgressBar
-                  title={"Number of Perfect Quizzes"}
-                  num={1}
-                  denom={2}
-                  progress={50}
-                />
-              </div>
-
-              {/* Progress Bar for Quizes TBD*/}
-              <div className="row">
-                <img src={fire} alt="badge" />
-
-                <ProgressBar
-                  title={"Number of Decks"}
-                  num={1}
-                  denom={2}
-                  progress={50}
-                />
-              </div>
-
-              {/* Progress Bar for Quizes TBD*/}
-              <div className="row">
-                <img src={fire} alt="badge" />
-
-                <ProgressBar
-                  title={"Number of Words"}
-                  num={1}
-                  denom={2}
-                  progress={50}
-                />
+                {generateProgress(this.state.dayStreak, 5, "Number of Words")}
               </div>
             </div>
           </div>
@@ -143,12 +130,25 @@ class Achievements extends Component {
   }
 }
 
-// function calcLevel(props) {
-//   return props.value;
-// }
+function calcLevel(points, increment) {
+  var o = {};
+  o.level = Math.floor(points / increment);
+  o.denom = (o.level + 1) * increment;
+  o.progress = ((points % increment) / increment) * 100;
+  return o;
+}
 
-// function calcNextLevel(props) {
-//   return props.value;
-// }
+function generateProgress(points, increment, title) {
+  var o = calcLevel(points, increment);
+
+  return (
+    <ProgressBar
+      title={title}
+      num={points}
+      denom={o.denom}
+      progress={o.progress}
+    />
+  );
+}
 
 export default Achievements;

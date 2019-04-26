@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import firebase, { auth } from "../config/firebase";
 import Card from "./cards/Card";
 import ProgressBar from "./gamification/ProgressBar";
@@ -13,8 +13,6 @@ class Review extends Component {
     this.userRef = firebase.firestore().collection("users");
 
     const cards = [];
-    const alreadyChecked = false;
-    const finished = false;
 
     this.state = {
       cards: cards,
@@ -28,7 +26,8 @@ class Review extends Component {
       interval: -1,
       nextreviewdate: -1,
       count: 0,
-      alreadyChecked,
+      alreadyChecked: false,
+      finished: false,
       newPoints: 0
     };
   }
@@ -73,6 +72,17 @@ class Review extends Component {
           });
         });
     }
+  };
+
+  // Increments the completedQuiz counter in Users
+  updateDeckComplete = () => {
+    var tempRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid);
+    tempRef.update({
+      doneQuizCount: firebase.firestore.FieldValue.increment(1)
+    });
   };
 
   componentDidMount() {
@@ -140,11 +150,11 @@ class Review extends Component {
     }
     var updatepoints = quality * 10;
     // POST POINTS TO DB
-    var docRef = firebase
+    var userRef = firebase
       .firestore()
       .collection("users")
       .doc(firebase.auth().currentUser.uid);
-    docRef.update({
+    userRef.update({
       points: firebase.firestore.FieldValue.increment(updatepoints)
     });
 
@@ -296,14 +306,15 @@ class Review extends Component {
     // SHOW CONGRATS IMAGE
     // BACK BUTTON TO DECK
     else if (this.state.finished) {
+      this.updateDeckComplete();
       return (
         <div className="container">
           <div className="">
-            <h3 className="centered clear-10">All Done!</h3>
-            <h3 className="centered clear-10">
+            <h3 className="centered clear-20">All Done!</h3>
+            <h3 className="centered clear-20">
               You Gained {this.state.newPoints} New Points
             </h3>
-            <div className="centered clear-10">
+            <div className="centered clear-20">
               <Link
                 to={{
                   pathname: "/deck/" + id,
@@ -318,12 +329,15 @@ class Review extends Component {
           </div>
         </div>
       );
-    } else {
+    }
+
+    // NOTHING TO REVIEW
+    else {
       return (
         <div className="container">
           <div className="">
-            <h3 className="centered clear-10">Nothing to Review!</h3>
-            <div className="centered clear-10">
+            <h3 className="centered clear-20">Nothing to Review!</h3>
+            <div className="centered clear-20">
               <Link
                 to={{
                   pathname: "/deck/" + id,

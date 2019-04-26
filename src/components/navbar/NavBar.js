@@ -41,56 +41,41 @@ class NavBar extends Component {
         .collection("users")
         .doc(firebase.auth().currentUser.uid);
 
-
-      console.log(docRef===null)
+      console.log(docRef === null);
       var o = {};
       o.lastLoginDate = Date.now();
-      
+
       // Check DB FOR EXISTING USER
-      docRef.get().then((docData) => {
-        if (docData.exists) {
-          // document exists (online/offline)
-          const { dayStreak, points, nextLoginBonus } = docData.data();
-          this.setState({
-            dayStreak,
-            points,
-            nextLoginBonus
-          });
-
-          //login bonus
-          // console.log(o.lastLoginDate);
-          // console.log(this.state.nextLoginBonus);
-          if (o.lastLoginDate >= this.state.nextLoginBonus) {
-            o.points = this.state.points + 100;
-            // streak if logining in < 48 hours since last visit
-            if (o.lastLoginDate < this.state.nextLoginBonus + oneday) {
-              o.dayStreak = this.state.dayStreak + 1;
-            } else {
-              o.dayStreak = 0;
-            }
-            // set next Login Bonus time
-            o.nextLoginBonus = Date.now() + oneday;
-            docRef.update(o);
+      docRef
+        .get()
+        .then(docData => {
+          if (docData.exists) {
+            // document exists (online/offline)
+            const { dayStreak, points, nextLoginBonus } = docData.data();
+            this.setState({
+              dayStreak,
+              points,
+              nextLoginBonus
+            });
+          } else {
+            // document does not exist (only on online)
+            console.log("new user");
+            o.displayName = firebase.auth().currentUser.displayName;
+            o.email = user.email;
+            o.accountCreatedDate = Date.now();
+            o.points = 0;
+            o.dayStreak = 0;
+            o.doneQuizCount = 0;
+            o.deckSize = 0;
+            o.nextLoginBonus = Date.now() + 60 * 60 * 24 * 1000;
+            docRef.set(o);
           }
-          
-
-        } else {
-          // document does not exist (only on online)
-        console.log("new user")
-        o.displayName = firebase.auth().currentUser.displayName;
-        o.email = user.email;
-        o.accountCreatedDate = Date.now();
-        o.points = 0;
-        o.dayStreak = 0;
-        o.nextLoginBonus = Date.now() + 60 * 60 * 24 * 1000;
-        docRef.set(o);
-        }
-      }).catch((fail) => {
-        // Either
-        // 1. failed to read due to some reason such as permission denied ( online )
-        // 2. failed because document does not exists on local storage ( offline )
-      });
-
+        })
+        .catch(fail => {
+          // Either
+          // 1. failed to read due to some reason such as permission denied ( online )
+          // 2. failed because document does not exists on local storage ( offline )
+        });
     });
   }
 
@@ -100,7 +85,10 @@ class NavBar extends Component {
       if (user) {
         this.setState({ user });
 
-        var docRef = firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid);
+        var docRef = firebase
+          .firestore()
+          .collection("users")
+          .doc(firebase.auth().currentUser.uid);
         var oneday = 60 * 60 * 24 * 1000;
         var o = {};
         o.lastLoginDate = Date.now();
@@ -116,13 +104,13 @@ class NavBar extends Component {
             if (o.lastLoginDate < nextLoginBonus + oneday) {
               o.dayStreak = dayStreak + 1;
             } else {
-              o.dayStreak = 0;
+              o.dayStreak = 1;
             }
             // set next Login Bonus time
             o.nextLoginBonus = Date.now() + oneday;
             docRef.update(o);
           }
-        })
+        });
       }
     });
   }
@@ -168,10 +156,6 @@ class NavBar extends Component {
       </nav>
     );
   }
-}
-
-function calcLevel(props) {
-  return props.value;
 }
 
 export default NavBar;

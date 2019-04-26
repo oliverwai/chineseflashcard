@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import firebase, { auth, provider } from "../../config/firebase.js";
+import firebase, { auth } from "../../config/firebase.js";
 import { Link } from "react-router-dom";
 
 class Dashboard extends Component {
@@ -18,31 +18,8 @@ class Dashboard extends Component {
       uid: null,
       reviewCount: -1
     };
-    //this.handleChange = this.handleChange.bind(this);
-    //this.handleSubmit = this.handleSubmit.bind(this);
   }
-  /*
-  handleChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  }
-  
 
-  handleSubmit(e) {
-    e.preventDefault();
-    const decksRef = firebase.database().ref("decks");
-    const deck = {
-      title: this.state.currentdeck,
-      user: this.state.username
-    };
-    decksRef.push(deck);
-    this.setState({
-      currentdeck: "",
-      username: ""
-    });
-  }
-  */
   onSubmit = e => {
     e.preventDefault();
 
@@ -63,6 +40,14 @@ class Dashboard extends Component {
       .catch(error => {
         console.error("Error adding document: ", error);
       });
+
+    var tempRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid);
+    tempRef.update({
+      deckSize: firebase.firestore.FieldValue.increment(1)
+    });
   };
 
   onChange = e => {
@@ -105,26 +90,6 @@ class Dashboard extends Component {
     });
 
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-
-    //this.ref.off(this.onCollectionUpdate);
-    //this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-    /*
-    const decksRef = firebase.database().ref("decks");
-    decksRef.on("value", snapshot => {
-      let decks = snapshot.val();
-      let newState = [];
-      for (let deck in decks) {
-        newState.push({
-          id: deck,
-          title: decks[deck].title,
-          user: decks[deck].user
-        });
-      }
-      this.setState({
-        decks: newState
-      });
-    });
-    */
   }
 
   // Delete Deck
@@ -136,6 +101,15 @@ class Dashboard extends Component {
       .delete()
       .then(() => {
         console.log("Document successfully deleted!");
+
+        // Decrease Deck Size Counter by 1
+        var tempRef = firebase
+          .firestore()
+          .collection("users")
+          .doc(firebase.auth().currentUser.uid);
+        tempRef.update({
+          deckSize: firebase.firestore.FieldValue.increment(-1)
+        });
 
         // This part deletes all the associate flashcards
         firebase
@@ -264,71 +238,6 @@ class Dashboard extends Component {
         )}
       </div>
     );
-
-    /*
-    return (
-      <div className="app">
-        {this.state.user ? (
-          <div>
-            <div className="container">
-              <section className="add-deck">
-                <form onSubmit={this.handleSubmit}>
-                  <input
-                    type="text"
-                    name="username"
-                    placeholder="Deck Name"
-                    onChange={this.handleChange}
-                    value={this.state.username}
-                  />
-                  <input
-                    type="text"
-                    name="currentdeck"
-                    placeholder="Deck Info"
-                    onChange={this.handleChange}
-                    value={this.state.currentdeck}
-                  />
-                  <button>Add Deck</button>
-                </form>
-              </section>
-              <section className="display-deck">
-                <div className="wrapper">
-                  <ul>
-                    {this.state.decks.map(deck => {
-                      return (
-                        <li key={deck.id}>
-                          <h3>{deck.title}</h3>
-                          <p>brought by: {deck.user}</p>
-                          <div>
-                            <button onClick={() => this.removedeck(deck.id)}>
-                              Remove
-                            </button>
-                            <Link
-                              to={{
-                                pathname: "/deck/" + deck.id,
-                                state: { id: deck.id }
-                              }}
-                              key={deck.id}
-                              className="link"
-                            >
-                              <button>View</button>
-                            </Link>
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              </section>
-            </div>
-          </div>
-        ) : (
-          <div className="wrapper">
-            <p>You must be logged in to see your deck list and add to it</p>
-          </div>
-        )}
-      </div>
-    );
-    */
   }
 }
 export default Dashboard;

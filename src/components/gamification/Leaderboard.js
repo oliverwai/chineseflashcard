@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
 import firebase from "../../config/firebase.js";
 import Table from "react-bootstrap/Table";
 import crown from "../img/crown.png";
+import { Link } from "react-router-dom";
 
 // replace this w/ flashcard info
 class DeckDetails extends Component {
@@ -43,15 +43,27 @@ class DeckDetails extends Component {
 
   render() {
     return (
-      <div class="container">
+      <div class="container" style={{ width: "50%" }}>
         <div className="row">
-          <div className="display-deck centered">
-            <div class="panel-heading">
+          <Link
+            to={{
+              pathname: "/"
+            }}
+          >
+            <button className="btn-floating btn-large waves-effect waves-light blue">
+              <i className="material-icons">arrow_back</i>
+            </button>
+          </Link>
+        </div>
+
+        <div className="row">
+          <div className="col display-deck centered">
+            <div className="panel-heading">
               <img src={crown} alt="icon" />
 
-              <h3 class="panel-title">LEADERBOARD</h3>
+              <h3 className="panel-title">LEADERBOARD</h3>
             </div>
-            <div class="panel-body centered">
+            <div className="panel-body centered">
               <Table striped bordered hover>
                 <thead>
                   <tr>
