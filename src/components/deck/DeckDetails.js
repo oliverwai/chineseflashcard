@@ -152,129 +152,129 @@ class DeckDetails extends Component {
     const { id } = this.props.location.state;
 
     return (
-      <div className="container">
-        <div className="row">
-          {/* LEFTMOST COL */}
-          <div className="col s3">
-            {/* BACK BUTTON */}
-            <div className="row">
-              <Link
-                to={{
-                  pathname: "/"
-                }}
-              >
-                <button className="btn-floating btn-large waves-effect waves-light blue">
-                  <i className="material-icons">arrow_back</i>
-                </button>
-              </Link>
-            </div>
-
-            {/* ADD FORM */}
-            <div className="add-deck">
-              <form onSubmit={this.onSubmit}>
-                <div className="form-group">
-                  <label>English:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="english"
-                    value={this.state.english}
-                    onChange={this.onChange}
-                    placeholder="English"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Pinyin:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="pinyin"
-                    value={this.state.pinyin}
-                    onChange={this.onChange}
-                    placeholder="Pinyin"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Chinese:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="hanzi"
-                    value={this.state.hanzi}
-                    onChange={this.onChange}
-                    placeholder="Chinese"
-                  />
-                </div>
-                <button className="btn blue">Add Card</button>
-              </form>
-            </div>
-          </div>
-
-          {/* RIGHTMOST COLUMN */}
-          <div className="col s7 pull-s3">
-            {/* Title */}
-            <div className="row">
-              <div className="panel-heading">
-                <h3 className="panel-title">{this.state.title}</h3>
-              </div>
-            </div>
-            <div className="row">
-              <div className="text-left">
+        <div className="container">
+          <div className="row">
+            {/* LEFTMOST COL */}
+            <div className="col s3">
+              {/* BACK BUTTON */}
+              <div className="row">
                 <Link
                   to={{
-                    pathname: "/review/" + id,
-                    state: { id: id }
+                    pathname: "/"
                   }}
                 >
-                  <button className="btn">Review</button>
+                  <button className="btn-floating btn-large waves-effect waves-light blue">
+                    <i className="material-icons">arrow_back</i>
+                  </button>
                 </Link>
+              </div>
+
+              {/* ADD FORM */}
+              <div className="add-deck">
+                <form onSubmit={this.onSubmit}>
+                  <div className="form-group">
+                    <label>English:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="english"
+                      value={this.state.english}
+                      onChange={this.onChange}
+                      placeholder="English"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Pinyin:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="pinyin"
+                      value={this.state.pinyin}
+                      onChange={this.onChange}
+                      placeholder="Pinyin"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Chinese:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="hanzi"
+                      value={this.state.hanzi}
+                      onChange={this.onChange}
+                      placeholder="Chinese"
+                    />
+                  </div>
+                  <button className="btn blue">Add Card</button>
+                </form>
               </div>
             </div>
 
-            <div className="row">
-              <div className="col s7">
-                <div className="panel-body">
-                  <table className="table table-stripe">
-                    <thead>
-                      <tr>
-                        <th>English</th>
-                        <th>Pinyin</th>
-                        <th>Chinese</th>
-                        <th>Review</th>
-                        <th> </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.state.cards.map(card => (
-                        <tr key={card.id}>
-                          <td>{card.english}</td>
-                          <td>{card.pinyin}</td>
-                          <td>{card.hanzi}</td>
-                          <td>
-                            {this.renderYesNo({
-                              nextReviewDate: card.nextReviewDate
-                            })}
-                          </td>
-                          <td>
-                            <div className="left">
-                              <button
-                                onClick={this.delete.bind(this, card.key)}
-                                className="btn btn-danger"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </td>
+            {/* RIGHTMOST COLUMN */}
+            <div className="col s7 pull-s3">
+              {/* Title */}
+              <div className="row">
+                <div className="panel-heading">
+                  <h3 className="panel-title">{this.state.title}</h3>
+                </div>
+              </div>
+              <div className="row">
+                <div className="text-left">
+                  <Link
+                    to={{
+                      pathname: "/review/" + id,
+                      state: { id: id }
+                    }}
+                  >
+                    <button className="btn">Review</button>
+                  </Link>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col s7">
+                  <div className="panel-body">
+                    <table className="table table-stripe">
+                      <thead>
+                        <tr>
+                          <th>English</th>
+                          <th>Pinyin</th>
+                          <th>Chinese</th>
+                          <th>Review</th>
+                          <th> </th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {this.state.cards.map(card => (
+                          <tr key={card.id}>
+                            <td>{card.english}</td>
+                            <td>{card.pinyin}</td>
+                            <td>{card.hanzi}</td>
+                            <td>
+                              {this.renderYesNo({
+                                nextReviewDate: card.nextReviewDate
+                              })}
+                            </td>
+                            <td>
+                              <div className="left">
+                                <button
+                                  onClick={this.delete.bind(this, card.key)}
+                                  className="btn btn-danger"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
     );
   }
 }

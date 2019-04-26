@@ -9,16 +9,14 @@ class NavBar extends Component {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.state = {
-      user: null,
-      newuser: ""
+      user: null
     };
   }
 
   logout() {
     auth.signOut().then(() => {
       this.setState({
-        user: null,
-        newuser: false
+        user: null
       });
     });
     window.location.reload();
@@ -31,10 +29,8 @@ class NavBar extends Component {
 
     await auth.signInWithPopup(provider).then(result => {
       const user = result.user;
-      var newuser = result.additionalUserInfo.isNewUser;
       this.setState({
         user,
-        newuser,
         points: 0,
         dayStreak: 0,
         nextLoginBonus: 0
@@ -44,25 +40,17 @@ class NavBar extends Component {
         .firestore()
         .collection("users")
         .doc(firebase.auth().currentUser.uid);
+
+
+      console.log(docRef===null)
       var o = {};
       o.lastLoginDate = Date.now();
-
-      if (newuser) {
-        //new user, create a ton of fields
-        o.displayName = firebase.auth().currentUser.displayName;
-        o.email = user.email;
-        o.accountCreatedDate = Date.now();
-        o.points = 0;
-        o.dayStreak = 0;
-        o.nextLoginBonus = Date.now() + 60 * 60 * 24 * 1000;
-        docRef.update(o);
-        console.log("new user");
-      }
-      //old user
-      else {
-        //get data
-        docRef.get().then(doc => {
-          const { dayStreak, points, nextLoginBonus } = doc.data();
+      
+      // Check DB FOR EXISTING USER
+      docRef.get().then((docData) => {
+        if (docData.exists) {
+          // document exists (online/offline)
+          const { dayStreak, points, nextLoginBonus } = docData.data();
           this.setState({
             dayStreak,
             points,
@@ -70,8 +58,8 @@ class NavBar extends Component {
           });
 
           //login bonus
-          console.log(o.lastLoginDate);
-          console.log(this.state.nextLoginBonus);
+          // console.log(o.lastLoginDate);
+          // console.log(this.state.nextLoginBonus);
           if (o.lastLoginDate >= this.state.nextLoginBonus) {
             o.points = this.state.points + 100;
             // streak if logining in < 48 hours since last visit
@@ -84,15 +72,57 @@ class NavBar extends Component {
             o.nextLoginBonus = Date.now() + oneday;
             docRef.update(o);
           }
-        });
-      }
+          
+
+        } else {
+          // document does not exist (only on online)
+        console.log("new user")
+        o.displayName = firebase.auth().currentUser.displayName;
+        o.email = user.email;
+        o.accountCreatedDate = Date.now();
+        o.points = 0;
+        o.dayStreak = 0;
+        o.nextLoginBonus = Date.now() + 60 * 60 * 24 * 1000;
+        docRef.set(o);
+        }
+      }).catch((fail) => {
+        // Either
+        // 1. failed to read due to some reason such as permission denied ( online )
+        // 2. failed because document does not exists on local storage ( offline )
+      });
+
     });
   }
 
+  // Update login time and calculate bonuses
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (user) {
         this.setState({ user });
+
+        var docRef = firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid);
+        var oneday = 60 * 60 * 24 * 1000;
+        var o = {};
+        o.lastLoginDate = Date.now();
+
+        docRef.get().then(doc => {
+          const { dayStreak, points, nextLoginBonus } = doc.data();
+          //login bonus
+          // console.log(o.lastLoginDate);
+          // console.log(this.state.nextLoginBonus);
+          if (o.lastLoginDate >= nextLoginBonus) {
+            o.points = points + 100;
+            // streak if logining in < 48 hours since last visit
+            if (o.lastLoginDate < nextLoginBonus + oneday) {
+              o.dayStreak = dayStreak + 1;
+            } else {
+              o.dayStreak = 0;
+            }
+            // set next Login Bonus time
+            o.nextLoginBonus = Date.now() + oneday;
+            docRef.update(o);
+          }
+        })
       }
     });
   }

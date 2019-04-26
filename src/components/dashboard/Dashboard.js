@@ -175,11 +175,11 @@ class Dashboard extends Component {
               {/* LEFTMOST COLUMN */}
               <div className="col s3">
                 {/* ADD DECK FORM */}
-                <div row>
+                <div className="row">
                   <div className="add-deck">
                     <form onSubmit={this.onSubmit}>
                       <div className="form-group">
-                        <label for="title">Title:</label>
+                        <label htmlFor="title">Title:</label>
                         <input
                           type="text"
                           className="form-control"
@@ -190,7 +190,7 @@ class Dashboard extends Component {
                         />
                       </div>
                       <div className="form-group">
-                        <label for="description">Description:</label>
+                        <label htmlFor="description">Description:</label>
                         <input
                           type="text"
                           className="form-control"

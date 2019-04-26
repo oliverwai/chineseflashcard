@@ -147,6 +147,10 @@ form button {
   margin-bottom: 20px;
 }
 
+.clear-20 {
+  margin-bottom: 40px;
+}
+
 .row .col {
   float: none !important;
   margin-left: auto;

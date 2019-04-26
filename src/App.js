@@ -23,9 +23,7 @@ class App extends Component {
       <BrowserRouter>
         <div className="app">
           <NavBar />
-          <tr class="clear_row">
-            <td colspan="3" />
-          </tr>
+          <div className="clear-20" />
           <Switch>
             <Route path="/" exact component={Dashboard} />
             <Route path="/review/:id" component={Review} />
