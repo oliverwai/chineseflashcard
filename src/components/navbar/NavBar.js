@@ -67,6 +67,8 @@ class NavBar extends Component {
             o.dayStreak = 0;
             o.doneQuizCount = 0;
             o.deckSize = 0;
+            o.perfectQuizCount = 0;
+            o.overXPCount = 0;
             o.nextLoginBonus = Date.now() + 60 * 60 * 24 * 1000;
             docRef.set(o);
           }

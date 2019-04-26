@@ -28,7 +28,8 @@ class Review extends Component {
       count: 0,
       alreadyChecked: false,
       finished: false,
-      newPoints: 0
+      newPoints: 0,
+      allPerfect: true
     };
   }
 
@@ -76,12 +77,18 @@ class Review extends Component {
 
   // Increments the completedQuiz counter in Users
   updateDeckComplete = () => {
+    var over300xp = this.state.newPoints >= 300;
     var tempRef = firebase
       .firestore()
       .collection("users")
       .doc(firebase.auth().currentUser.uid);
     tempRef.update({
-      doneQuizCount: firebase.firestore.FieldValue.increment(1)
+      doneQuizCount: firebase.firestore.FieldValue.increment(1),
+      // below returns 1 if true 0 if false
+      perfectQuizCount: firebase.firestore.FieldValue.increment(
+        Number(this.state.allPerfect)
+      ),
+      overXPCount: firebase.firestore.FieldValue.increment(Number(over300xp))
     });
   };
 
@@ -159,6 +166,12 @@ class Review extends Component {
     });
 
     var newPoints = this.state.newPoints + updatepoints;
+
+    if (quality < 4) {
+      this.setState({
+        allPerfect: false
+      });
+    }
     this.setState({
       newPoints
     });

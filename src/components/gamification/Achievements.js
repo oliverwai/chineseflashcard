@@ -18,7 +18,9 @@ class Achievements extends Component {
       dayStreak: 0,
       displayName: null,
       doneQuizCount: 0,
-      deckSize: 0
+      deckSize: 0,
+      perfectQuizCount: 0,
+      overXPCount: 0
     };
   }
 
@@ -34,7 +36,9 @@ class Achievements extends Component {
             doneQuizCount,
             dayStreak,
             displayName,
-            points
+            points,
+            perfectQuizCount,
+            overXPCount
           } = doc.data();
           this.setState({
             user,
@@ -43,7 +47,9 @@ class Achievements extends Component {
             points,
             dayStreak,
             doneQuizCount,
-            deckSize
+            deckSize,
+            perfectQuizCount,
+            overXPCount
           });
         });
       }
@@ -104,19 +110,27 @@ class Achievements extends Component {
               {/* Progress Bar for Perfect Quizes */}
               <div className="row">
                 <img src={fire} alt="badge" />
-                {generateProgress(this.state.dayStreak, 5, "Perfect Quizzes")}
+                {generateProgress(
+                  this.state.perfectQuizCount,
+                  5,
+                  "Too Easy! Perfect Quiz"
+                )}
               </div>
 
               {/* Progress Bar for # Decks*/}
               <div className="row">
                 <img src={fire} alt="badge" />
-                {generateProgress(this.state.deckSize, 3, "Number of Decks")}
+                {generateProgress(this.state.deckSize, 10, "Number of Decks")}
               </div>
 
               {/* Progress Bar for Quizes TBD*/}
               <div className="row">
                 <img src={fire} alt="badge" />
-                {generateProgress(this.state.dayStreak, 5, "Number of Words")}
+                {generateProgress(
+                  this.state.overXPCount,
+                  5,
+                  ">300XP in One Quiz"
+                )}
               </div>
             </div>
           </div>
