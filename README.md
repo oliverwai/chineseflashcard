@@ -10,7 +10,8 @@ To run the file, the user must specify their own firebase config, located in the
 
 The file should look like this: 
 
-    // src/firebase.js
+    // src/config/firebase.js
+    
     import firebase from "firebase";
     // Initialize Firebase
     var config = {
