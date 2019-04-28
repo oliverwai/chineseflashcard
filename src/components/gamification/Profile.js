@@ -28,15 +28,12 @@ class Profile extends Component {
 
         var docRef = this.ref.doc(uid);
         docRef.get().then(doc => {
-          const {
-            displayName,
-            points,
-          } = doc.data();
+          const { displayName, points } = doc.data();
           this.setState({
             user,
             uid,
             displayName,
-            points,
+            points
           });
         });
       }
@@ -47,41 +44,41 @@ class Profile extends Component {
     const level = Math.floor(this.state.points / 1000);
 
     return (
-        <div>
-          {this.state.user ? (
-            <div>
-              {/* MAIN COLUMN */}
-              <div className="col s12">
-                <div>
-                  <ProfilePic value={level} />
-                </div>
-                <div>
-                  <h5 className="centered">{this.state.displayName}</h5>
-                </div>
-                <div>
-                  <h5 className="centered">Level: {level}</h5>
-                </div>
-                <div>
-                    <h5 className="centered">Points: {this.state.points}</h5>
+      <div>
+        {this.state.user ? (
+          <div>
+            {/* MAIN COLUMN */}
+            <div className="col s12">
+              <div>
+                <ProfilePic value={level} />
               </div>
+              <div>
+                <h5 className="centered">{this.state.displayName}</h5>
+              </div>
+              <div>
+                <h5 className="centered">Level: {level}</h5>
+              </div>
+              <div>
+                <h5 className="centered">Points: {this.state.points}</h5>
               </div>
             </div>
-          ) : (
-            <div className="wrapper">
-              <p>You must be logged in to see your Profile</p>
-            </div>
-          )}
-        </div>
-      ); 
+          </div>
+        ) : (
+          <div className="wrapper">
+            <p>You must be logged in to see your Profile</p>
+          </div>
+        )}
+      </div>
+    );
   }
 }
 
 function calcLevel(points, increment) {
-    var o = {};
-    o.level = Math.floor(points / increment);
-    o.denom = (o.level + 1) * increment;
-    o.progress = ((points % increment) / increment) * 100;
-    return o;
+  var o = {};
+  o.level = Math.floor(points / increment);
+  o.denom = (o.level + 1) * increment;
+  o.progress = ((points % increment) / increment) * 100;
+  return o;
 }
 
 export default Profile;
