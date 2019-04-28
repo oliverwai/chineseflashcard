@@ -50,7 +50,7 @@ header i {
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
     0 3px 3px -2px rgba(0, 0, 0, 0.12), 0 1px 8px 0 rgba(0, 0, 0, 0.2);
   margin-bottom: 34px;
-  width: 40%;
+  width: 75%;
   margin-right: auto;
 }
 
@@ -165,4 +165,17 @@ form button {
 .tdcenter {
   text-align: center;
   vertical-align: middle;
+}
+
+.profile{
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
+    0 3px 3px -2px rgba(0, 0, 0, 0.12), 0 1px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: 0 auto;
+  text-align: center;
+  max-width: 200px; 
+    max-height: 250px;
+}
+.profile img {
+    max-width: 150px; 
+    max-height: 150px;
 }

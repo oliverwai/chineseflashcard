@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import firebase, { auth } from "../../config/firebase.js";
 import { Link } from "react-router-dom";
+import Profile from "../gamification/Profile.js"
 
 class Dashboard extends Component {
   constructor() {
@@ -181,7 +182,7 @@ class Dashboard extends Component {
               </div>
 
               {/* RIGHTMOST COLUMN */}
-              <div className="col s7 pull-s3">
+              <div className="col s7">
                 {/* DECKLIST */}
                 <div className="panel-heading clear-10">
                   <h3 className="panel-title">DECK LIST</h3>
@@ -229,13 +230,18 @@ class Dashboard extends Component {
                   </table>
                 </div>
               </div>
+              <div className="col s2">
+                <div className="profile">
+                  <Profile/>
+                </div>
+              </div>
             </div>
           </div>
         ) : (
-          <div className="wrapper">
-            <p>You must be logged in to see your deck list and add to it</p>
-          </div>
-        )}
+            <div className="wrapper">
+              <p>You must be logged in to see your deck list and add to it</p>
+            </div>
+          )}
       </div>
     );
   }

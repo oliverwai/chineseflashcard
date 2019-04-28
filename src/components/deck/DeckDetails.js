@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import firebase, { auth } from "../../config/firebase.js";
+import Profile from "../gamification/Profile.js";
 
 // replace this w/ flashcard info
 // @TODO: create crud app w/ table flashcards
@@ -211,7 +212,7 @@ class DeckDetails extends Component {
             </div>
 
             {/* RIGHTMOST COLUMN */}
-            <div className="col s7 pull-s3">
+            <div className="col s7">
               {/* Title */}
               <div className="row">
                 <div className="panel-heading">
@@ -273,6 +274,11 @@ class DeckDetails extends Component {
                 </div>
               </div>
             </div>
+            <div className="col s2">
+                <div className="profile">
+                  <Profile/>
+                </div>
+              </div>
           </div>
         </div>
     );
