@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import firebase, { auth, provider } from "../../config/firebase.js";
 import { Link } from "react-router-dom";
 import fire from "../img/firestreak.png"; // Tell Webpack this JS file uses this image
+import points from "../img/points.png";
 import ProgressBar from "./ProgressBar";
 import ProfilePic from "./ProfilePic";
+import LevelPic from "./LevelPic";
 
 class Achievements extends Component {
   constructor() {
@@ -88,18 +90,18 @@ class Achievements extends Component {
               </div>
               {/* Progress Bar for Points */}
               <div className="row">
-                <img src={fire} alt="badge" />
+                <img src={points} style={{ width: 80, height:80}} alt="badge" />
                 {generateProgress(this.state.points, 1000, "Points")}
               </div>
               {/* Progress Bar for Day Streaks */}
               <div className="row">
-                <img src={fire} alt="badge" />
+                <LevelPic value={Math.floor(this.state.dayStreak / 5)} />
                 {generateProgress(this.state.dayStreak, 5, "Login Streak")}
               </div>
 
               {/* Progress Bar for Quizes TBD*/}
               <div className="row">
-                <img src={fire} alt="badge" />
+              <LevelPic value={Math.floor(this.state.doneQuizCount / 5)} />
                 {generateProgress(
                   this.state.doneQuizCount,
                   5,
@@ -109,7 +111,7 @@ class Achievements extends Component {
 
               {/* Progress Bar for Perfect Quizes */}
               <div className="row">
-                <img src={fire} alt="badge" />
+              <LevelPic value={Math.floor(this.state.perfectQuizCount / 5)} />
                 {generateProgress(
                   this.state.perfectQuizCount,
                   5,
@@ -119,13 +121,13 @@ class Achievements extends Component {
 
               {/* Progress Bar for # Decks*/}
               <div className="row">
-                <img src={fire} alt="badge" />
+              <LevelPic value={Math.floor(this.state.deckSize / 10)} />
                 {generateProgress(this.state.deckSize, 10, "Number of Decks")}
               </div>
 
               {/* Progress Bar for Quizes TBD*/}
               <div className="row">
-                <img src={fire} alt="badge" />
+              <LevelPic value={Math.floor(this.state.overXPCount / 5)} />
                 {generateProgress(
                   this.state.overXPCount,
                   5,
