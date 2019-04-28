@@ -148,7 +148,8 @@ form button {
 }
 
 .clear-20 {
-  margin-bottom: 40px;
+  padding-bottom: 20px;
+  padding-top: 10px;
 }
 
 .row .col {
@@ -178,4 +179,18 @@ form button {
 .profile img {
     max-width: 150px; 
     max-height: 150px;
+}
+.complete {
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
+    0 3px 3px -2px rgba(0, 0, 0, 0.12), 0 1px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: 0 auto;
+  text-align: center;
+  width: 50%;
+  margin-bottom: 100px;
+  justify-content: center;
+}
+
+.complete img {
+  margin-left: 60px;
+  margin-right: 50px;
 }

@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import firebase, { auth } from "../config/firebase";
 import Card from "./cards/Card";
 import ProgressBar from "./gamification/ProgressBar";
+import points from "./img/points.png";
+import perfect from "./img/perfect.png";
 
 class Review extends Component {
   constructor() {
@@ -322,11 +324,15 @@ class Review extends Component {
       this.updateDeckComplete();
       return (
         <div className="container">
-          <div className="">
-            <h3 className="centered clear-20">All Done!</h3>
-            <h3 className="centered clear-20">
-              You Gained {this.state.newPoints} New Points
-            </h3>
+          <div className="complete">
+            <h3 className="centered clear-20">{this.state.allPerfect ? "Perfect!" : "All Done!"}</h3>
+            <div className="row">
+              <img src={points} style={{ width: 80, height:80}} alt="badge" />
+              <h3 className="centered clear-20">
+                +{this.state.newPoints} Points
+              </h3>
+            </div>
+            {isPerfect(this.state.allPerfect)}
             <div className="centered clear-20">
               <Link
                 to={{
@@ -348,7 +354,7 @@ class Review extends Component {
     else {
       return (
         <div className="container">
-          <div className="">
+          <div className="complete">
             <h3 className="centered clear-20">Nothing to Review!</h3>
             <div className="centered clear-20">
               <Link
@@ -369,4 +375,16 @@ class Review extends Component {
   }
 }
 
+function isPerfect (allPerfect) {
+  if(allPerfect) {
+    return (
+      <div className="row">
+        <img src={perfect} style={{ width: 80, height:80}} alt="badge" />
+        <h3 className="centered clear-20">
+        +1 Too Easy! Perfect Quiz
+        </h3>
+      </div>
+    )
+  }
+}
 export default Review;
