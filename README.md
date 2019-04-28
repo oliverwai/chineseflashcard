@@ -4,6 +4,7 @@ The Hanzi Application is a simple Flashcard application for studying Chinese mad
 
 # Setup
 To run the program, navigate to the main folder and type:
+
     yarn start
 
 To run the file, the user must specify their own firebase config, located in the /src/config/firebase.js file. Firebase must be configured on the website to enable Google Oauth access. 
