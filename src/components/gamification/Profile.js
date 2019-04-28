@@ -53,7 +53,7 @@ class Profile extends Component {
                 <ProfilePic value={level} />
               </div>
               <div>
-                <h5 className="centered">{this.state.displayName}</h5>
+                <h4 className="centered">{this.state.displayName}</h4>
               </div>
               <div>
                 <h5 className="centered">Level: {level}</h5>

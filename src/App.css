@@ -169,14 +169,21 @@ form button {
 }
 
 .profile{
+  border-radius: 2px;
+  border-top: 3px solid #103d5d;
+  padding: 20px 18px;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
     0 3px 3px -2px rgba(0, 0, 0, 0.12), 0 1px 8px 0 rgba(0, 0, 0, 0.2);
-    margin: 0 auto;
-  text-align: center;
-  max-width: 200px; 
-    max-height: 250px;
+  margin-bottom: 34px;
+  width: 75%;
+  margin-right: auto;
+  max-width: 250px; 
+    max-height: 300px;
+    justify-content: center;
+    text-align: center;
 }
 .profile img {
+    justify-content: center;
     max-width: 150px; 
     max-height: 150px;
 }
