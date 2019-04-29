@@ -3,9 +3,7 @@ import { Redirect, Link } from "react-router-dom";
 import firebase, { auth } from "../../config/firebase.js";
 import Profile from "../gamification/Profile.js";
 
-// replace this w/ flashcard info
-// @TODO: create crud app w/ table flashcards
-// then create a review for today's cards
+
 class DeckDetails extends Component {
   constructor() {
     super();
@@ -57,7 +55,6 @@ class DeckDetails extends Component {
           hanzi: "",
           deckid: id
         });
-        //this.props.history.push("/");
       })
       .catch(error => {
         console.error("Error adding document: ", error);
@@ -71,9 +68,7 @@ class DeckDetails extends Component {
   };
 
   onCollectionUpdate = querySnapshot => {
-    //cards
     const cards = [];
-    //const id = this.props.location.state;
 
     this.ref
       .where("deckid", "==", this.state.deckid)
@@ -83,7 +78,7 @@ class DeckDetails extends Component {
           const { english, pinyin, hanzi, deckid, nextReviewDate } = doc.data();
           cards.push({
             key: doc.id,
-            doc, // DocumentSnapshot
+            doc, 
             english,
             pinyin,
             hanzi,
@@ -135,7 +130,6 @@ class DeckDetails extends Component {
 
   // Delete flashcard
   delete(id) {
-    // console.log(id);
     firebase
       .firestore()
       .collection("flashcards")

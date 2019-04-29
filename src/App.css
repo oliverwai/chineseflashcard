@@ -104,19 +104,6 @@ form button {
   margin-top: 10px;
 }
 
-.user-profile {
-  position: fixed;
-  bottom: 20px;
-  right: 40px;
-  width: 100px;
-  height: 100px;
-}
-
-.user-profile img {
-  border-radius: 50%;
-  max-width: 100%;
-}
-
 .link {
   color: #fff;
   text-decoration: none;

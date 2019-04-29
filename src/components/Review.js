@@ -97,13 +97,6 @@ class Review extends Component {
   };
 
   componentDidMount() {
-    /*
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        this.setState({ user });
-      }
-    });
-    */
     const { id } = this.props.location.state;
     if (id) {
       this.setState({ deckid: id });
@@ -181,14 +174,6 @@ class Review extends Component {
     });
   };
 
-  // handlePrev = () => {
-  //   if (this.state.count > 0) {
-  //     this.setState(({ count }) => ({
-  //       count: count - 1
-  //     }));
-  //   }
-  // };
-
   // TAKES IN CURRENT SRS SCORE, CARD ID, BUTTON PRESS, CALCS NEW SCORE
 
   render() {
@@ -204,7 +189,6 @@ class Review extends Component {
       typeof this.state.cards[this.state.count] !== "undefined" &&
       !this.state.finished
     ) {
-      // console.log(this.state.cards[0]["english"]);
       return (
         <div className="container" style={{}}>
           {/* Back Row */}
@@ -244,25 +228,6 @@ class Review extends Component {
                   pin={currentCard["pinyin"]}
                 />
               </div>
-
-              {/* PREV NEXT BUTTONS */}
-              {/* <div className="row">
-                <div className="col s6 text-center">
-                  <button
-                    className="waves-effect waves-light btn"
-                    onClick={this.handlePrev}
-                  >
-                    Last
-                  </button>
-                  <button
-                    className="waves-effect waves-light btn"
-                    onClick={this.handleNext}
-                  >
-                    Next
-                  </button>
-                </div>
-              </div> */}
-
               {/* SRS BUTTONS WITH SELECTED ANSWER SOL PASSED ON*/}
               <div className="row">
                 <div className="col s6 text-center">

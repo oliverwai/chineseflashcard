@@ -8,7 +8,6 @@ class Dashboard extends Component {
     super();
     this.ref = firebase.firestore().collection("decks");
     this.unsubscribe = null;
-    // const uid= firebase.auth().currentUser.uid
     this.state = {
       currentdeck: "",
       username: "",
@@ -36,7 +35,6 @@ class Dashboard extends Component {
           title: "",
           description: ""
         });
-        //this.props.history.push("/");
       })
       .catch(error => {
         console.error("Error adding document: ", error);
@@ -68,7 +66,7 @@ class Dashboard extends Component {
           const { title, description, author } = doc.data();
           decks.push({
             key: doc.id,
-            doc, // DocumentSnapshot
+            doc, 
             title,
             description,
             author
@@ -86,7 +84,6 @@ class Dashboard extends Component {
         this.setState({ user });
         this.setState({ uid: firebase.auth().currentUser.uid });
         this.onCollectionUpdate();
-        // console.log(this.state.uid)
       }
     });
 
@@ -135,12 +132,6 @@ class Dashboard extends Component {
       });
   }
 
-  /*
-  removedeck(deckId) {
-    const deckRef = firebase.database().ref(`/decks/${deckId}`);
-    deckRef.remove();
-  }
-  */
   render() {
     return (
       <div>

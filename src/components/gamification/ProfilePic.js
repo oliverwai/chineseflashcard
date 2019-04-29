@@ -5,8 +5,6 @@ import owl3 from "../img/owl3.png"; // Tell Webpack this JS file uses this image
 import owl4 from "../img/owl4.png"; // Tell Webpack this JS file uses this image
 import owl5 from "../img/owl5.png"; // Tell Webpack this JS file uses this image
 
-// Takes in props for numerator, denominator, and progress %
-// outputs the entire progress bar
 const ProfilePic = props => {
   var profile = 0;
   if (props.value === 0) {

@@ -1,13 +1,8 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import firebase, { auth, provider } from "../../config/firebase.js";
-import fire from "../img/firestreak.png"; // Tell Webpack this JS file uses this image
-import ProgressBar from "./ProgressBar";
 import ProfilePic from "./ProfilePic";
 
-// replace this w/ flashcard info
-// @TODO: create crud app w/ table flashcards
-// then create a review for today's cards
 class Profile extends Component {
   constructor() {
     super();
